@@ -1,0 +1,29 @@
+{
+  "name": "bookdash-server",
+  "version": "0.0.1",
+  "description": "Server side for Bookdash",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon src/server.js --exec \"npm run lint && node\"",
+    "lint": "true || ./node_modules/.bin/eslint **/*.js",
+    "seed": "node ./seed"
+  },
+  "author": "Sean Stevens <sstevens88@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "react": "^16.3.2",
+    "sequelize": "^4.37.10"
+  }
+}
