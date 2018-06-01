@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^1.0.0",
     "@material-ui/icons": "^1.0.0",
+    "axios": "^0.18.0",
     "classnames": "^2.2.5",
     "jss": "^9.8.1",
     "next": "^6.0.3",

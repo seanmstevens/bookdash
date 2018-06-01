@@ -1,4 +1,4 @@
-import ButtonAppBar from '../structure/Header'
+import ButtonAppBar from '../components/Header/Header'
 
 export default ({ children }) => (
   <div>

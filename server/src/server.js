@@ -11,6 +11,9 @@ app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
+require('./config/passport')
+require('./routes')(app)
+
 sequelize.sync({ force: false })
   .then(() => {
     app.listen(config.port)

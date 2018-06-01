@@ -58,7 +58,7 @@ class Index extends Component {
       <div className={classes.root}>
         <Page>
           <Grid container>
-            <Hero size="fullscreen" src="/static/images/mainpage-splash--16-9-blurred.jpg">
+            <Hero size="fullscreen" src="src/static/images/mainpage-splash--16-9-blurred.jpg">
               <Grid className={classes.heroMain}>
                 <Grid item>
                   <Typography variant="display4" className={classes.heroDisplay}>
