@@ -1,0 +1,30 @@
+[
+  {
+    "title": "The Lathe of Heaven",
+    "author": "Ursula K. Le Guin",
+    "genre": "Science Fiction",
+    "description": "In a future world racked by violence and environmental catastrophes, George Orr wakes up one day to discover that his dreams have the ability to alter reality. He seeks help from Dr. William Haber, a psychiatrist who immediately grasps the power George wields. Soon George must preserve reality itself as Dr. Haber becomes adept at manipulating George’s dreams for his own purposes.",
+    "coverArt": "https://images-na.ssl-images-amazon.com/images/I/41EQ3LzZg-L._SX321_BO1,204,203,200_.jpg",
+    "publisher": "Scribner",
+    "publicationDate": "2008-04-15",
+    "isbn10": "1416556966",
+    "isbn13": "978-1416556961",
+    "pageCount": 192,
+    "amazonUrl": "https://www.amazon.com/Lathe-Heaven-Ursula-K-Guin/dp/1416556966",
+    "goodreadsUrl": "https://www.goodreads.com/book/show/59924.The_Lathe_of_Heaven"
+  },
+  {
+    "title": "Wolf in White Van",
+    "author": "John Darnielle",
+    "genre": "Mystery/Thrillers/Suspense",
+    "description": "Isolated by a disfiguring injury since the age of seventeen, Sean Phillips crafts imaginary worlds for strangers to explore. As the creator of \"Trace Italian\"-a text-based role-playing game that's played through the mail-Sean guides subscribers through his intricately imagined terrain, turn by turn, as they search out sanctuary in a ravaged, savage future America. But when Lance and Carrie, two teenaged seekers of the Trace, take their play outside the game, disaster strikes, and Sean is called on to account for it. In the process, he is pulled back through time, toward the beginning and the climax: the moment of his own self-inflicted departure from the world in which most people live.",
+    "coverArt": "https://assets.vice.com/content-images/contentimage/184681/wolf-in-white-van-cover.jpg",
+    "publisher": "Picador",
+    "publicationDate": "2015-09-01",
+    "isbn10": "1250074711",
+    "isbn13": "978-1250074713",
+    "pageCount": 224,
+    "amazonUrl": "https://www.amazon.com/Wolf-White-Van-John-Darnielle/dp/1250074711",
+    "goodreadsUrl": "https://www.goodreads.com/book/show/20575425-wolf-in-white-van"
+  }
+]
