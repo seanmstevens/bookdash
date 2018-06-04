@@ -1,5 +1,6 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
 const BooksController = require('./controllers/BooksController')
+const AuthorsController = require('./controllers/AuthorsController')
 
 module.exports = app => {
   app.post('/register',
@@ -9,4 +10,7 @@ module.exports = app => {
 
   app.get('/books',
     BooksController.index)
+
+  app.get('/authors',
+    AuthorsController.index)
 }

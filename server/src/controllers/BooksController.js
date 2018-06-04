@@ -3,30 +3,31 @@ const { Book } = require('../models')
 module.exports = {
   async index (req, res) {
     try {
-      let books = null
+      let books
       const search = req.query.search
 
       if (search) {
-        books = await Book.findAll({
+        books = await Book.findAndCountAll({
           where: {
             $or: [
               'title', 'author', 'genre'
             ].map(key => ({
               [key]: {
-                $like: `%${search}%`
+                $iLike: `%${search}%`
               }
             }))
           }
         })
       } else {
-        books = await Book.findAll({
+        books = await Book.findAndCountAll({
           order: [
             ['id', 'DESC']
           ],
-          limit: 10
+          limit: 20
         })
+        books.count = books.rows.length
       }
-      res.send(books)
+      res.send({ data: books })
     } catch (err) {
       res.status(500).send({
         error: 'An error occurred while trying to fetch books.'

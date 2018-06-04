@@ -7,9 +7,20 @@ import amber from '@material-ui/core/colors/amber'
 
 // A theme with custom primary and secondary color.
 // It's optional.
+// https://material.io/tools/color/#!/?view.left=0&view.right=1&primary.color=dce8ea&secondary.color=FFD740
 const theme = createMuiTheme({
   palette: {
-    primary: { main: blue[500] }
+    primary: {
+      light: '#ffffff',
+      main: '#dce8ea',
+      dark: '#aab6b8'
+    },
+    secondary: {
+      light: '#D4FFFF',
+      main: '#A1E8CC',
+      dark: '#70B69B'
+    },
+    accent: '#495159'
   }
 })
 

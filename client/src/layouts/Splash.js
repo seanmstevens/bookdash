@@ -3,7 +3,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 export default ({ children }) => (
   <div>
-    <ButtonAppBar title="none" transparent />
+    <ButtonAppBar title="none" transparent dark/>
     {children}
   </div>
 )

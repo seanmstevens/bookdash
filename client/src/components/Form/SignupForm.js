@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import withRoot from '../../withRoot'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -20,23 +20,9 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import ThirdPartyAccounts from './ThirdPartyAccounts'
-import lightBlue from '@material-ui/core/colors/lightBlue'
 
 const styles = theme => ({
-  signupButton: {
-    color: lightBlue[400]
-  },
-  cssLabel: {
-    '&$cssFocused': {
-      color: lightBlue[400],
-    },
-  },
-  cssFocused: {},
-  cssUnderline: {
-    '&:after': {
-      borderBottomColor: lightBlue[400],
-    },
-  }
+
 })
 
 class SignupForm extends React.Component {
@@ -82,7 +68,7 @@ class SignupForm extends React.Component {
     const { classes } = this.props
 
     return (
-      <Card>
+      <Card className={classes.card}>
         <form noValidate autoComplete="off">
           <CardContent>
             <Typography variant="body1">
@@ -154,8 +140,7 @@ class SignupForm extends React.Component {
               Sign up
             </Button>
             <Tooltip
-              enterDelay={275}
-              leaveDelay={275}
+              enterDelay={230}
               id="tooltip-left"
               title="Reset form"
               placement="right"

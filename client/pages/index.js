@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import Page from '../src/layouts/Splash'
 import Hero from '../src/components/Hero/Hero'
-import ButtonAppBar from '../src/structure/Header'
+import ButtonAppBar from '../src/components/Header/Header'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -27,7 +27,7 @@ const styles = theme => ({
   getStartedButton: {
     borderRadius: 3,
     border: 0,
-    color: 'white',
+    color: 'rgba(0, 0, 0, 0.67)',
     height: 48,
     padding: '0 30px'
   },
@@ -58,7 +58,7 @@ class Index extends Component {
       <div className={classes.root}>
         <Page>
           <Grid container>
-            <Hero size="fullscreen" src="src/static/images/mainpage-splash--16-9-blurred.jpg">
+            <Hero size="fullscreen" src="static/images/mainpage-splash--16-9-blurred.jpg">
               <Grid className={classes.heroMain}>
                 <Grid item>
                   <Typography variant="display4" className={classes.heroDisplay}>

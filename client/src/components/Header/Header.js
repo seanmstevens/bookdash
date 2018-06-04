@@ -5,9 +5,9 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import { withStyles, MuiThemeProvider } from '@material-ui/core/styles'
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
   },
@@ -21,29 +21,37 @@ const styles = {
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
-  },
-}
+  }
+})
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark'
+  }
+})
 
 const ButtonAppBar = props => {
-  const { classes, transparent, title } = props
+  const { classes, transparent, title, dark } = props
   return (
-    <div className={classes.root}>
-      <AppBar
-        className={transparent && classes.transparent}
-        position="fixed"
-        color="primary"
-      >
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              {title !== 'none' && 'Bookdash'}
-            </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <MuiThemeProvider theme={dark && theme}>
+      <div className={classes.root}>
+        <AppBar
+          className={transparent && classes.transparent}
+          position="fixed"
+          color="secondary"
+        >
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <MenuIcon />
+            </IconButton>
+              <Typography variant="title" color="inherit" className={classes.flex}>
+                {title !== 'none' && 'Bookdash'}
+              </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+    </MuiThemeProvider>
   )
 }
 

@@ -4,48 +4,53 @@ import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 
-import Page from '../src/layouts/Main'
 import Grid from '@material-ui/core/Grid'
 import SignupForm from '../src/components/Form/SignupForm'
+import WelcomeBox from '../src/components/WelcomeBox/WelcomeBox'
 import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
-  root: theme.mixins.gutters({
-    paddingTop: 80,
+  root: {
     flex: '1 1 100%',
     maxWidth: '100%',
-    margin: '0 auto',
-  }),
+    padding: 0,
+    margin: 0,
+  },
+  section: {
+    padding: '1rem',
+    height: '100vh',
+    minHeight: 440
+  },
   [theme.breakpoints.up('lg')]: {
-    root: {
-      maxWidth: theme.breakpoints.values.lg
-    },
     formContainer: {
-      maxWidth: '40%',
-      margin: 'auto'
+      maxWidth: '80%',
+      margin: 'auto',
+      padding: 24
     }
   },
-  formContainer: {
-    padding: 24
-  }
+  welcomeBox: {
+    background: theme.palette.secondary.main
+  },
+  signupBox: {
+    background: 'url("static/images/get-started-bookstack.jpg")',
+    backgroundSize: 'cover'
+  },
 })
 
 const GetStarted = props => {
   const { classes } = props
 
   return (
-    <Page>
-      <Grid className={classes.root} container direction="column">
-        <Grid item>
-          <Typography variant="display1" component='h4'>
-            Register for an account
-          </Typography>
-        </Grid>
+    <Grid className={classes.root} container direction="row">
+      <Grid xs={12} md={7} item className={classNames(classes.section, classes.welcomeBox)} component="section">
+        <WelcomeBox />
+      </Grid>
+      <Grid xs={12} md={5} item className={classNames(classes.section, classes.signupBox)} component="section">
         <Grid item className={classes.formContainer}>
           <SignupForm />
         </Grid>
       </Grid>
-    </Page>
+    </Grid>
   )
 }
 
