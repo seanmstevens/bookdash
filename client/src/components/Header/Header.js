@@ -12,7 +12,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   transparent: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(78, 81, 89, 0.5)',
     boxShadow: 'none'
   },
   flex: {

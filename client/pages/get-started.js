@@ -5,7 +5,8 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 
 import Grid from '@material-ui/core/Grid'
-import SignupForm from '../src/components/Form/SignupForm'
+import SignupCard from '../src/components/Form/SignupCard'
+import ThirdPartyAccounts from '../src/components/Form/ThirdPartyAccounts'
 import WelcomeBox from '../src/components/WelcomeBox/WelcomeBox'
 import Typography from '@material-ui/core/Typography'
 
@@ -17,14 +18,13 @@ const styles = theme => ({
     margin: 0,
   },
   section: {
+    display: 'flex',
     padding: '1rem',
     height: '100vh',
-    minHeight: 440
+    minHeight: 488
   },
   [theme.breakpoints.up('lg')]: {
     formContainer: {
-      maxWidth: '80%',
-      margin: 'auto',
       padding: 24
     }
   },
@@ -32,6 +32,9 @@ const styles = theme => ({
     background: theme.palette.secondary.main
   },
   signupBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     background: 'url("static/images/get-started-bookstack.jpg")',
     backgroundSize: 'cover'
   },
@@ -42,12 +45,25 @@ const GetStarted = props => {
 
   return (
     <Grid className={classes.root} container direction="row">
-      <Grid xs={12} md={7} item className={classNames(classes.section, classes.welcomeBox)} component="section">
+      <Grid
+        xs={12}
+        md={7}
+        item
+        className={classNames(classes.section, classes.welcomeBox)}
+        component="section"
+      >
         <WelcomeBox />
       </Grid>
-      <Grid xs={12} md={5} item className={classNames(classes.section, classes.signupBox)} component="section">
-        <Grid item className={classes.formContainer}>
-          <SignupForm />
+      <Grid
+        xs={12}
+        md={5}
+        item
+        className={classNames(classes.section, classes.signupBox)}
+        component="section"
+      >
+        <Grid xs={10} md={8} spacing={16} item className={classes.formContainer}>
+          <SignupCard />
+          <ThirdPartyAccounts />
         </Grid>
       </Grid>
     </Grid>

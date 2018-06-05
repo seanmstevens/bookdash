@@ -77,7 +77,7 @@ class Index extends Component {
                     classes={{
                       root: classes.getStartedButton
                     }}
-                    variant="raised"
+                    variant="contained"
                     size="large"
                     color="secondary">
                     Get Started

@@ -4,7 +4,7 @@
   "description": "An application to connect book lovers far and wide",
   "main": "index.js",
   "dependencies": {
-    "@material-ui/core": "^1.0.0",
+    "@material-ui/core": "^1.2.0",
     "@material-ui/icons": "^1.0.0",
     "axios": "^0.18.0",
     "classnames": "^2.2.5",

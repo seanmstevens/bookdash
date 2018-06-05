@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -32,8 +33,9 @@ const styles = theme => ({
     marginTop: 18,
     marginBottom: 18
   },
-  featureIcon: {
-    color: theme.palette.accent
+  featureAvatar: {
+    backgroundColor: 'rgba(0, 0, 0, 0.24)',
+    color: '#FFF'
   },
   [theme.breakpoints.up('lg')]: {
     root: {
@@ -59,8 +61,10 @@ const WelcomeBox = props => {
       <Grid item zeroMinWidth className={classes.features}>
         <List>
           <ListItem>
-            <ListItemIcon className={classes.featureIcon}>
-              <CollectionsBookmark />
+            <ListItemIcon>
+              <Avatar className={classes.featureAvatar}>
+                <CollectionsBookmark />
+              </Avatar>
             </ListItemIcon>
             <ListItemText
               className={classes.featuresText}
@@ -68,8 +72,10 @@ const WelcomeBox = props => {
             />
           </ListItem>
           <ListItem>
-            <ListItemIcon className={classes.featureIcon}>
-              <QuestionAnswer />
+            <ListItemIcon>
+              <Avatar className={classes.featureAvatar}>
+                <QuestionAnswer />
+              </Avatar>
             </ListItemIcon>
             <ListItemText
               className={classes.featuresText}
@@ -77,8 +83,10 @@ const WelcomeBox = props => {
             />
           </ListItem>
           <ListItem>
-            <ListItemIcon className={classes.featureIcon}>
-              <PersonPin />
+            <ListItemIcon>
+              <Avatar className={classes.featureAvatar}>
+                <PersonPin />
+              </Avatar>
             </ListItemIcon>
             <ListItemText
               primary="Excepteur sint occaecat cupidatat non proident"
