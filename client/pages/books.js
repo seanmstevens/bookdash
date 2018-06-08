@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import withRoot from '../src/withRoot'
+// import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 
@@ -18,4 +18,4 @@ const Books = props => {
   )
 }
 
-export default withRoot(withStyles()(Books))
+export default withStyles()(Books)

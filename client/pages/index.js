@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
+import classNames from 'classnames'
 
 import Page from '../src/layouts/Splash'
 import Hero from '../src/components/Hero/Hero'
-import ButtonAppBar from '../src/components/Header/Header'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
@@ -18,7 +18,10 @@ const styles = theme => ({
   },
   heroDisplay: {
     color: '#ffffff',
-    textShadow: '1px 0 10px rgb(90, 86, 80)'
+    textShadow: '1px 0 10px rgb(90, 86, 80)',
+  },
+  title: {
+    fontSize: 'calc(80px + 31 * ((100vw - 375px) / 1065))'
   },
   heroMain: {
     position: 'relative',
@@ -34,6 +37,10 @@ const styles = theme => ({
 })
 
 class Index extends Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired
+  }
+
   state = {
     open: false,
   }
@@ -61,7 +68,7 @@ class Index extends Component {
             <Hero size="fullscreen" src="static/images/mainpage-splash--16-9-blurred.jpg">
               <Grid className={classes.heroMain}>
                 <Grid item>
-                  <Typography variant="display4" className={classes.heroDisplay}>
+                  <Typography variant="display4" className={classNames(classes.heroDisplay, classes.title)}>
                     Bookdash
                   </Typography>
                 </Grid>
@@ -90,10 +97,6 @@ class Index extends Component {
       </div>
     )
   }
-}
-
-Index.propTypes = {
-  classes: PropTypes.object.isRequired,
 }
 
 export default withRoot(withStyles(styles)(Index))

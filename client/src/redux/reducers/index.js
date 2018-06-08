@@ -1,0 +1,17 @@
+import { combineReducers } from 'redux'
+import { reducer as form } from 'redux-form'
+import authReducer from './authReducer'
+
+export const initialState = {
+  auth: {
+    authenticated: null,
+    error: ''
+  }
+}
+
+const rootReducer = combineReducers({
+  form,
+  auth: authReducer
+})
+
+export default rootReducer

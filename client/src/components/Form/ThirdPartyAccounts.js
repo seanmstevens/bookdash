@@ -24,13 +24,18 @@ const styles = theme => ({
   }
 })
 
+const theme = createMuiTheme({
+  palette: {
+    type: 'light'
+  }
+})
+
 const ThirdPartyAccounts = props => {
   const { classes } = props
 
   return (
-    <Card>
-      <CardHeader title="User other social accounts" />
-      <CardContent>
+    <CardContent>
+      <MuiThemeProvider theme={theme}>
         <Grid container spacing={16}>
           <Grid item>
             <Button
@@ -61,8 +66,8 @@ const ThirdPartyAccounts = props => {
             </Button>
           </Grid>
         </Grid>
-      </CardContent>
-    </Card>
+      </MuiThemeProvider>
+    </CardContent>
   )
 }
 

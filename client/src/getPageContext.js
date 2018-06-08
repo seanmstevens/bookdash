@@ -2,8 +2,6 @@
 
 import { SheetsRegistry } from 'jss'
 import { createMuiTheme, createGenerateClassName } from '@material-ui/core/styles'
-import blue from '@material-ui/core/colors/blue'
-import amber from '@material-ui/core/colors/amber'
 
 // A theme with custom primary and secondary color.
 // It's optional.
@@ -18,7 +16,7 @@ const theme = createMuiTheme({
     secondary: {
       light: '#D4FFFF',
       main: '#A1E8CC',
-      dark: '#70B69B'
+      dark: '#70B69B',
     },
     accent: '#495159'
   }
@@ -47,6 +45,7 @@ export default function getPageContext() {
   if (!global.__INIT_MATERIAL_UI__) {
     global.__INIT_MATERIAL_UI__ = createPageContext()
   }
+
 
   return global.__INIT_MATERIAL_UI__
 }

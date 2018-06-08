@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
+import Link from 'next/link'
 import classNames from 'classnames'
 
 import Grid from '@material-ui/core/Grid'
 import SignupCard from '../src/components/Form/SignupCard'
-import ThirdPartyAccounts from '../src/components/Form/ThirdPartyAccounts'
 import WelcomeBox from '../src/components/WelcomeBox/WelcomeBox'
-import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import NavigateBefore from '@material-ui/icons/NavigateBefore'
 
 const styles = theme => ({
   root: {
@@ -18,7 +19,6 @@ const styles = theme => ({
     margin: 0,
   },
   section: {
-    display: 'flex',
     padding: '1rem',
     height: '100vh',
     minHeight: 488
@@ -27,6 +27,9 @@ const styles = theme => ({
     formContainer: {
       padding: 24
     }
+  },
+  backButton: {
+    position: 'absolute'
   },
   welcomeBox: {
     background: theme.palette.secondary.main
@@ -52,6 +55,11 @@ const GetStarted = props => {
         className={classNames(classes.section, classes.welcomeBox)}
         component="section"
       >
+        <Link prefetch href="/">
+          <IconButton className={classes.backButton}>
+            <NavigateBefore />
+          </IconButton>
+        </Link>
         <WelcomeBox />
       </Grid>
       <Grid
@@ -61,9 +69,10 @@ const GetStarted = props => {
         className={classNames(classes.section, classes.signupBox)}
         component="section"
       >
-        <Grid xs={10} md={8} spacing={16} item className={classes.formContainer}>
-          <SignupCard />
-          <ThirdPartyAccounts />
+        <Grid container spacing={16} className={classes.formContainer} justify="center">
+          <Grid item xs={12} md={9}>
+            <SignupCard />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
