@@ -15,6 +15,7 @@ import Refresh from '@material-ui/icons/Refresh'
 import Tooltip from '@material-ui/core/Tooltip'
 import Divider from '@material-ui/core/Divider'
 import ThirdPartyAccounts from './ThirdPartyAccounts'
+import Grow from '@material-ui/core/Grow'
 import blue from '@material-ui/core/colors/blue'
 
 import SignupInputs from './SignupInputs'
@@ -48,12 +49,12 @@ class SignupCard extends React.Component {
     errorMessage: PropTypes.string
   }
 
-  handleFormSubmit = ({ email, password }) => {
-    this.props.signupUser({ email, password })
+  handleFormSubmit = ({ name, email, password }) => {
+    this.props.registerUser({ name, email, password })
   }
 
   render () {
-    const { handleSubmit, pristine, reset, submitting, error, errorMessage, classes } = this.props
+    const { handleSubmit, pristine, reset, submitting, valid, errorMessage, classes } = this.props
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -61,7 +62,7 @@ class SignupCard extends React.Component {
           <CardHeader className={classes.header} title="Sign up" subheader="Enter your email and password"/>
           <ThirdPartyAccounts />
           <Divider />
-          <form noValidate autoComplete="off"onSubmit={handleSubmit}>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             <CardContent className={classes.content}>
               <SignupInputs />
             </CardContent>
@@ -69,7 +70,7 @@ class SignupCard extends React.Component {
             <CardActions>
               <Button
                 type="submit"
-                disabled={error || pristine || submitting}
+                disabled={!valid || pristine || submitting}
                 variant="contained"
                 color="primary"
                 size="small"
@@ -82,16 +83,21 @@ class SignupCard extends React.Component {
                 id="tooltip-left"
                 title="Reset form"
                 placement="right"
-                >
+                disableHoverListener={pristine}
+                disableTouchListener={pristine}
+                disableFocusListener={pristine}
+              >
                 <div>
-                  <IconButton
-                    disabled={pristine || submitting}
-                    aria-label="Reset form"
-                    onClick={reset}
-                    className={classes.resetButton}
-                    >
-                    <Refresh />
-                  </IconButton>
+                  <Grow in={!pristine}>
+                    <IconButton
+                      disabled={pristine || submitting}
+                      aria-label="Reset form"
+                      onClick={reset}
+                      className={classes.resetButton}
+                      >
+                      <Refresh />
+                    </IconButton>
+                  </Grow>
                 </div>
               </Tooltip>
             </CardActions>

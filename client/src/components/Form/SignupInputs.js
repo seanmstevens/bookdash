@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import Fade from '@material-ui/core/Fade'
 
 const styles = theme => ({
   absolute: {
@@ -56,12 +57,11 @@ const renderField = ({
       placeholder={placeholder}
       endAdornment={endAdornment}
     />
-    {touched &&
-      (error && 
-        <FormHelperText className={classes.absolute}>
-          {error}
-        </FormHelperText>
-      )}
+    <Fade in={!!touched && !!error}>
+      <FormHelperText className={classes.absolute}>
+        {error}
+      </FormHelperText>
+    </Fade>
   </FormControl>
 )
 
@@ -88,6 +88,15 @@ class SignupInputs extends Component {
     const { classes } = this.props
 
     return [
+      <Field
+        key="name"
+        classes={classes}
+        name="name"
+        component={renderField}
+        type="text"
+        label="Full Name"
+        placeholder="Angela Lansbury"
+      />,
       <Field
         key="email"
         classes={classes}

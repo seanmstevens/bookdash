@@ -29,7 +29,8 @@ const styles = theme => ({
     }
   },
   backButton: {
-    position: 'absolute'
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.08)'
   },
   welcomeBox: {
     background: theme.palette.secondary.main

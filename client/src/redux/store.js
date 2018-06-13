@@ -1,7 +1,10 @@
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+// import { persistStore, persistCombineReducers } from 'redux-persist'
+// import { CookieStorage } from 'redux-persist-cookie-storage'
+// import Cookies from 'cookies-js'
 
-import reducers, { initialState } from './reducers'
+import reducers from './reducers'
 import rootSaga from './saga'
 
 const sagaMiddleware = createSagaMiddleware()
@@ -15,7 +18,7 @@ const bindMiddleware = (middleware) => {
   return applyMiddleware(...middleware)
 }
 
-const configureStore = (state = initialState) => {
+const configureStore = (state) => {
   const store = createStore(
     reducers,
     state,

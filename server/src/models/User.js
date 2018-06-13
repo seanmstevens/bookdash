@@ -24,12 +24,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     name: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(25),
       allowNull: false
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    provider: {
+      type: DataTypes.JSONB
+    },
+    emailVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
     }
   }, {
     hooks: {

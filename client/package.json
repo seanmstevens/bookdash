@@ -8,8 +8,10 @@
     "@material-ui/icons": "^1.0.0",
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
+    "cookies-js": "^1.2.3",
     "jss": "^9.8.1",
     "next": "^6.0.3",
+    "next-auth": "^1.8.5",
     "next-redux-saga": "^3.0.0-beta.1",
     "next-redux-wrapper": "^2.0.0-beta.6",
     "prop-types": "^15.6.1",
@@ -21,6 +23,8 @@
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.3.0",
+    "redux-persist": "^5.10.0",
+    "redux-persist-cookie-storage": "^1.0.0",
     "redux-saga": "^0.16.0"
   },
   "devDependencies": {

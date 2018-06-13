@@ -1,3 +1,6 @@
-export const AUTH_USER = 'AUTH_USER'
-export const UNAUTH_USER = 'UNAUTH_USER'
+export const LOGIN_REQUEST = 'LOGIN_REQUEST'
+export const REGISTER_REQUEST = 'REGISTER_REQUEST'
+export const AUTH_SUCCESS = 'AUTH_SUCCESS'
+export const UNAUTH_REQUEST = 'UNAUTH_REQUEST'
 export const AUTH_ERROR = 'AUTH_ERROR'
+export const CLEAR_ERROR = 'CLEAR_ERROR'
