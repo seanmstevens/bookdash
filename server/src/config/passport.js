@@ -3,13 +3,25 @@ const { User } = require('../models')
 const providers = require('./providers')
 const functions = require('../controllers/AuthenticationController')
 
-passport.serializeUser((user, done) => {
-  done(null, user.id)
+passport.serializeUser((user, next) => {
+  console.log('PASSPORT SERIALIZE:', user)
+  try {
+    next(null, user.id)
+  } catch (error) {
+    console.log('Unable to serialize user:', error)
+    next(error, false)
+  }
 })
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id)
-  done(null, user)
+  console.log('PASSPORT DESERIALIZE:', id)
+  try {
+    const user = await User.findById(id)
+    next(null, user)
+  } catch (error) {
+    console.log(error)
+    next(error, false)
+  }
 })
 
 providers.forEach(({
@@ -37,10 +49,11 @@ providers.forEach(({
           }
 
           try {
-            const user = await functions.find({
-              provider: {
-                name: providerName.toLowerCase(),
-                id: profile.id
+            const user = await User.findOne({
+              where: {
+                [providerName.toLowerCase()]: {
+                  id: profile.id
+                }
               }
             })
   
@@ -56,7 +69,7 @@ providers.forEach(({
                     }
 
                     try {
-                      const newUser = await functions.update(user, _profile)
+                      const newUser = await user.save()
                     } catch (err) {
                       next(err)
                     }
@@ -73,10 +86,10 @@ providers.forEach(({
                 // Handles situation in which a user is already logged in
                 // and is trying to link to a new account
                 try {
-                  const id = await functions.serialize(req.user)
+                  const id = req.user.id
                   if (!id) throw new Error('Unable to serialize user')
   
-                  const user = await functions.find({ id: id })
+                  let user = await User.findById(id)
                   if (!user) {
                     return next(new Error('Unable to look up account for current user'). false)
                   }
@@ -85,7 +98,7 @@ providers.forEach(({
                   const pattern = new RegExp(/.*@localhost\.localdomain$/)
   
                   if (user.email && user.email.match(pattern) && profile.email && !profile.match(pattern)) {
-                    user.emailVerified = false
+                    user.emailVerified = true // Assuming that third party account has a verified email
                     user.email = profile.email
                   }
   
@@ -96,8 +109,8 @@ providers.forEach(({
                   }
   
                   try {
-                    const newUser = await functions.update(user, _profile)
-                    return next(null, user)
+                    const newUser = await user.save()
+                    return next(null, newUser)
                   } catch (err) {
                     return next(err)
                   }
@@ -113,7 +126,7 @@ providers.forEach(({
                   if (refreshToken) user[providerName.toLowerCase()].refreshToken = refreshToken
 
                   try {
-                    const newUser = await update(user, _profile)
+                    const newUser = await user.save()
                     return next(null, user)
                   } catch (err) {
                     return next(err, false) 
@@ -124,11 +137,15 @@ providers.forEach(({
               } else {
                 // Handle scenarios where the user is not logged in and
                 // they don't have a local account already
-                const user = await functions.find({ email: profile.email })
+                const user = await User.findOne({
+                  where: {
+                    email: profile.email    
+                  }
+                })
                 if (user) return next(null, false)
 
                 try {
-                  const newUser = await functions.insert({
+                  const newUser = await User.create({
                     name: profile.name,
                     email: profile.email,
                     [providerName.toLowerCase()]: {
@@ -136,7 +153,7 @@ providers.forEach(({
                       accessToken: accessToken,
                       refreshToken: refreshToken
                     }
-                  }, _profile) 
+                  })
 
                   return next(null, newUser)
                 } catch (err) {
@@ -154,5 +171,3 @@ providers.forEach(({
     )
   )
 })
-
-module.exports = null

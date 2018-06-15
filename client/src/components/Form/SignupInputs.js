@@ -127,15 +127,6 @@ class SignupInputs extends Component {
             </IconButton>
           </InputAdornment>
         }
-      />,
-      <Field
-        key="passwordConfirm"
-        classes={classes}
-        name="passwordConfirm"
-        component={renderField}
-        type={this.state.showPassword ? 'text' : 'password'}
-        label="Confirm Password"
-        placeholder="RudabegaStew"
       />
     ]
   }

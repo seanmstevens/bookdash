@@ -7,7 +7,9 @@ const morgan = require('morgan')
 const expressSession = require('express-session')
 const lusca = require('lusca')
 const uuid = require('uuid/v4')
+const passport = require('passport')
 
+const passportSetup = require('./config/passport')
 const { sequelize } = require('./models')
 const serverConfig = require('./config/server.config')
 const authConfig = require('./config/auth.config')
@@ -15,18 +17,24 @@ const authRoutes = require('./routes/auth-routes')
 
 // Initialize app
 const app = express()
+const SessionStore = require('connect-session-sequelize')(expressSession.Store)
 
 // Initialize middlewares
+app.use(cors())
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-app.use(cors())
+
 app.use(compression())
 app.use(expressSession({
   secret: authConfig.sessionSecret,
-  store: authConfig.sessionStore,
+  store: new SessionStore({
+    db: sequelize,
+    checkExpirationInterval: 10 * 60 * 1000
+  }),
+  name: 'sessionId',
   resave: false,
   rolling: true,
   saveUninitialized: false,
@@ -36,11 +44,14 @@ app.use(expressSession({
     maxAge: authConfig.sessionMaxAge
   }
 }))
-app.use(lusca.csrf())
 
 // Add router and passport
-require('./config/passport')
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/auth', authRoutes)
+
+// Must load Lusca after our auth routes have been established
+app.use(lusca.csrf())
 
 // Sync database to server
 sequelize.sync({ force: false })

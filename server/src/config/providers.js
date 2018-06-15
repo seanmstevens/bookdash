@@ -6,6 +6,7 @@ if (facebook.id && facebook.secret) {
   providers.push({
     providerName: 'Facebook',
     providerOptions: {
+      display: 'popup',
       scope: ['email', 'public_profile']
     },
     Strategy: require('passport-facebook').Strategy,
@@ -29,6 +30,7 @@ if (google.id && google.secret) {
   providers.push({
     providerName: 'Google',
     providerOptions: {
+      display: 'popup',
       scope: ['profile', 'email']
     },
     Strategy: require('passport-google-oauth').OAuth2Strategy,
