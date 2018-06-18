@@ -1,4 +1,4 @@
-const { Author } = require('../models')
+const { Author } = require('../../../database/models')
 
 module.exports = {
   async index (req, res) {

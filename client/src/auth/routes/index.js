@@ -1,10 +1,8 @@
 const router = require('express').Router()
-const providers = require('../config/providers')
+const providers = require('../providers')
 const passport = require('passport')
-const { User } = require('../models')
-const AuthenticationController = require('../controllers/AuthenticationController')
-const BooksController = require('../controllers/BooksController')
-const AuthorsController = require('../controllers/AuthorsController')
+const { User } = require('../../../../database/models')
+const AuthenticationController = require('../controllers')
 
 // GET handlers
 router.get('/csrf', AuthenticationController.csrf)
@@ -45,19 +43,21 @@ providers.forEach(({
       return next(new Error('Not signed in'))
     }
 
-    const id = await AuthenticationController.serialize(req.user)
+    const id = req.user.id
     if (!id) throw new Error('Unable to serialize user')
 
-    const user = await AuthenticationController.find({ id: id })
+    const user = await User.findById(id)
     if (!user) return next(new Error('Unable to look up account for current user'))
 
     if (user[provider]) {
-      delete user[provider]
+      user[provider] = null
     }
 
+    console.log('PROVIDER DELETED:::::', user)
+
     try {
-      const newUser = await AuthenticationController.update(user, null, { delete: provider })
-      return res.redirect(`/callback?action=unlink&service=${provider}`)
+      const newUser = await user.save()
+      return res.redirect(`http://localhost:3000/auth/callback?action=unlink&service=${provider}`)
     } catch (err) {
       return next(err, false)
     }

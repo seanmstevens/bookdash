@@ -3,7 +3,7 @@ const {
   Book,
   User,
   Author
-} = require('../src/models')
+} = require('../../database/models')
 
 const Promise = require('bluebird')
 const books = require('./books.json')

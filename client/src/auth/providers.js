@@ -1,4 +1,4 @@
-const { authentication: { google, facebook } } = require('./server.config')
+const { authentication: { google, facebook } } = require('../../../env.config')
 
 let providers = []
 

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { NextAuth } from '../../src/next-auth'
 
 export default class extends React.Component {
-  
   static async getInitialProps({ ctx }) {
     const { req } = ctx
     return {
@@ -23,7 +22,6 @@ export default class extends React.Component {
     }
     this.handleEmailChange = this.handleEmailChange.bind(this)  
     this.handleSignInSubmit = this.handleSignInSubmit.bind(this)
-    console.log(props)
   }
     
   handleEmailChange(event) {
@@ -47,6 +45,7 @@ export default class extends React.Component {
   }
   
   render() {
+    console.log(this.props)   
     if (this.props.session.user) {
       return (
         <div className="container">

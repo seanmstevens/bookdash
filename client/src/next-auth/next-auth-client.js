@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 
 const myApi = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'http://localhost:3000',
   timeout: 10000
 })
 
@@ -22,47 +22,45 @@ export default class {
     force = false
   } = {}) {
     let session = {}
-    // if (req) {
-    //   if (req.session) {
-    //     // If running on the server session data should be in the req object
-    //     session.csrfToken = req.connection._httpMessage.locals._csrf
-    //     session.expires = req.session.cookie._expires
-    //     // If the user is logged in, add the user to the session object
-    //     if (req.user) {
-    //       session.user = req.user
-    //     }
-    //   }
-    // } else {
-    //   // If running in the browser attempt to load session from sessionStore
-    //   if (force === true) {
-    //     // If force update is set, reset data store
-    //     this._removeLocalStore('session')
-    //   } else {
-    //     session = this._getLocalStore('session')
-    //   }
-    // }
+    if (req) {
+      if (req.session) {
+        // If running on the server session data should be in the req object
+        session.csrfToken = req.connection._httpMessage.locals._csrf
+        session.expires = req.session.cookie._expires
+        // If the user is logged in, add the user to the session object
+        if (req.user) {
+          session.user = req.user
+        }
+      }
+    } else {
+      // If running in the browser attempt to load session from sessionStore
+      if (force === true) {
+        // If force update is set, reset data store
+        this._removeLocalStore('session')
+      } else {
+        session = this._getLocalStore('session')
+      }
+    }
 
-    // // If session data exists, has not expired AND force is not set then
-    // // return the stored session we already have.
-    // if (session && Object.keys(session).length > 0 && session.expires && session.expires > Date.now()) {
-    //   return new Promise(resolve => {
-    //     resolve(session)
-    //   })
-    // } else {
-    //   // If running on server, but session has expired return empty object
-    //   // (no valid session)
-    //   if (typeof window === 'undefined') {
-    //     return new Promise(resolve => {
-    //       resolve({})
-    //     })
-    //   }
-    // }
+    // If session data exists, has not expired AND force is not set then
+    // return the stored session we already have.
+    if (session && Object.keys(session).length > 0 && session.expires && session.expires > Date.now()) {
+      return new Promise(resolve => {
+        resolve(session)
+      })
+    } else {
+      // If running on server, but session has expired return empty object
+      // (no valid session)
+      if (typeof window === 'undefined') {
+        return new Promise(resolve => {
+          resolve({})
+        })
+      }
+    }
 
     // If we don't have session data, or it's expired, or force is set
     // to true then revalidate it by fetching it again from the server.
-    return myApi.get('/auth/session', {
-      // Options
-    })
+    return myApi.get('/auth/session')
     .then(response => {
       if (response.status === 200) {
         return response
@@ -70,11 +68,9 @@ export default class {
         return Promise.reject(Error('HTTP error when trying to get session'))
       }
     })
-    .then(response => response.json())
     .then(data => {
       // Update session with session info
-      console.log(data)
-      session = data
+      session = data.data
 
       // Set a value we will use to check this client should silently
       // revalidate, using the value for revalidateAge returned by the server.
@@ -85,16 +81,17 @@ export default class {
 
       return session
     })
-    .catch(() => Error('Unable to get session'))
+    .catch((err) => {
+      Error('Unable to get session')
+      console.log(err)
+    })
   }
 
   /**
    * A simple static method to get the CSRF Token is provided for convenience
    **/
   static async csrfToken() {
-    return myApi.get('/auth/csrf', {
-      // Options
-    })
+    return myApi.get('/auth/csrf')
     .then(response => {
       if (response.status === 200) {
         return response
@@ -115,12 +112,10 @@ export default class {
     req = null
   } = {}) {
     // If running server side, uses server side method
-    // if (req) return req.linked()
+    if (req) return req.linked()
     
     // If running client side, use RESTful endpoint
-    return myApi.get('/auth/linked', {
-      // Options
-    })
+    return myApi.get('/auth/linked')
     .then(response => {
       if (response.status === 200) {
         return response
@@ -139,12 +134,10 @@ export default class {
     req = null
   } = {}) {
     // If running server side, uses server side method
-    // if (req) return req.providers()
+    if (req) return req.providers()
     
     // If running client side, use RESTful endpoint
-    return myApi.get('/auth/providers', {
-      // Options
-    })
+    return myApi.get('/auth/providers')
     .then(response => {
       if (response.status === 200) {
         return response
@@ -192,7 +185,6 @@ export default class {
       }
     })
     .then(response => {
-      console.log('RESPONSE RETURNED:', response)
       if (response.status === 200) {
         return response
       } else {
@@ -200,7 +192,6 @@ export default class {
       }
     })
     .then(data => {
-      console.log('SIGNIN DATA RETURNED:', data)
       if (data.success && data.success === true) {
         return Promise.resolve(true)
       } else {
@@ -223,13 +214,13 @@ export default class {
     // Remove cached session data
     this._removeLocalStore('session')
 
-    return fetch('http://localhost:5000/auth/signout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: encodedForm,
-    })
+    return axios.post(
+      '/auth/signout',
+      encodedForm,
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
+    )
     .then(() => {
       return true
     })

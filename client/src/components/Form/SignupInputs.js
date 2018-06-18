@@ -26,6 +26,9 @@ const styles = theme => ({
     '&:hover': {
       background: 'transparent'
     }
+  },
+  hiddenField: {
+    display: 'none'
   }
 })
 
@@ -52,6 +55,7 @@ const renderField = ({
     </InputLabel>
     <Input
       {...input}
+      autoComplete={type === 'email' ? 'username' : null}
       id={name}
       type={type}
       placeholder={placeholder}
@@ -106,6 +110,7 @@ class SignupInputs extends Component {
         label="Email"
         placeholder="jane@example.com"
       />,
+      <input className={classes.hiddenField} />,
       <Field
         key="password"
         classes={classes}

@@ -1,31 +1,30 @@
-const { User } = require('../models')
-const serverConfig = require('../config/server.config')
-const providers = require('../config/providers')
+const { User } = require('../../../../database/models')
+const { email, session } = require('../../../../env.config')
+const providers = require('../providers')
 const uuid = require('uuid/v4')
-const authConfig = require('../config/auth.config')
 const nodemailer = require('nodemailer')
 
 let transportOptions
 
-if (serverConfig.email.server && serverConfig.email.username && serverConfig.email.password) {
+if (email.server && email.username && email.password) {
   transportOptions = {
     service: 'gmail',
     auth: {
-      user: serverConfig.email.username,
-      pass: serverConfig.email.password
+      user: email.username,
+      pass: email.password
     }
   }
 }
 
-async function sendSignInEmail ({email, url, req}) {
+async function sendSignInEmail ({ email, url, req }) {
   nodemailer
     .createTransport(transportOptions)
     .sendMail({
       to: email,
-      from: serverConfig.email.from,
+      from: email.from,
       subject: 'Verify your email',
       text: `Use the link below to sign in:\n\n${url}\n\n`,
-      html: `<p>Use the link below to sign in:</p><p>${url}</p>`
+      html: `<p><strong></strong>Use the link below to sign in:</strong></p><p>${url}</p>`
     }, (err) => {
       if (err) {
         console.error('Error sending email to ' + email, err)
@@ -44,10 +43,9 @@ module.exports = {
     })
   },
   async getSession (req, res) {
-    console.log(res)
-    let session = {
-      maxAge: authConfig.sessionMaxAge,
-      revalidateAge: authConfig.sessionRevalidateAge,
+    let sess = {
+      maxAge: session.sessionMaxAge,
+      revalidateAge: session.sessionRevalidateAge,
       csrfToken: res.locals._csrf
     }
 
@@ -55,22 +53,21 @@ module.exports = {
     if (req.user) {
       // If logged in, export the API access token details to the client
       // Note: This token is valid for the duration of this session only.
-      session.user = req.user
+      sess.user = req.user
       if (req.session && req.session.api) {
-        session.api = req.session.api
+        sess.api = req.session.api
       }
     }
 
-    return res.json(session)
+    return res.json(sess)
   },
   async providers (req, res) {
     let configuredProviders = {}
-    const serverUrl = `${serverConfig.host}:${serverConfig.port}`
 
     providers.forEach(provider => {
       configuredProviders[provider.providerName] = {
-        signin: (serverUrl || '') + `/auth/oauth/${provider.providerName.toLowerCase()}`,
-        callback: (serverUrl || '') + `/auth/oauth/${provider.providerName.toLowerCase()}/callback`
+        signin: (session.serverUrl || '') + `/auth/oauth/${provider.providerName.toLowerCase()}`,
+        callback: (session.serverUrl || '') + `/auth/oauth/${provider.providerName.toLowerCase()}/callback`
       }
     })
 
@@ -79,22 +76,19 @@ module.exports = {
   async linkedAccounts (req, res) {
     if (!req.user) return res.status(400).send({
       success: false,
-      error: 'NO USER FOUND IN REQUEST'
+      error: 'No user was found in the request'
     })
 
     try {
       const user = await User.findById(req.user.id)
-      if (!user) return res.json({ success: false, error: 'UNABLE TO FIND USER' })
+      if (!user) return res.json({ success: false, error: 'Unable to find user' })
   
       let linkedAccounts = {}
       providers.forEach(provider => {
-        linkedAccounts[provider.providerName] = user[provider.providerName.toLowerCase()].id ? true : false
+        linkedAccounts[provider.providerName] = user[provider.providerName.toLowerCase()] != null ? true : false
       })
   
-      return res.json({
-        success: true,
-        linkedAccounts
-      })
+      return res.json(linkedAccounts)
     } catch (error) {
       console.log(error)
       return res.status(500).send({
@@ -121,17 +115,9 @@ module.exports = {
         // Delete current token so it cannot be used again
         // Mark email as verified now we know they have access to it
         user.emailVerified = true
-        newUser = await User.update({
-          emailToken: null,
-          emailVerified: true
-        }, {
-          where: {
-            emailToken: req.params.token
-          },
-          returning: true
-        })
+        user.emailToken = null
 
-        newUser = newUser[1][0]
+        newUser = await user.save()
       } else {
         throw new Error('Token not valid')
       }
@@ -160,7 +146,7 @@ module.exports = {
     }
 
     const token = uuid()
-    const url = ('http://localhost:5000' || `${req.protocol}://${req.headers.host}`) + `/auth/email/signin/${token}`
+    const url = (session.serverUrl || `${req.protocol}://${req.headers.host}`) + `/auth/email/signin/${token}`
 
     // Create verification token save it to database
     try {

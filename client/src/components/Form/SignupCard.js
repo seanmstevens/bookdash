@@ -26,7 +26,9 @@ const styles = theme => ({
   },
   content: {
     paddingTop: 8,
-    paddingBottom: 32
+    paddingBottom: 32,
+    paddingLeft: 48,
+    paddingRight: 48
   }
 })
 

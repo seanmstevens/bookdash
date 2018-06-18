@@ -1,7 +1,7 @@
 const passport = require('passport')
-const { User } = require('../models')
+const { User } = require('../../../database/models')
 const providers = require('./providers')
-const functions = require('../controllers/AuthenticationController')
+const functions = require('./controllers')
 
 passport.serializeUser((user, next) => {
   console.log('PASSPORT SERIALIZE:', user)
@@ -13,10 +13,20 @@ passport.serializeUser((user, next) => {
   }
 })
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (id, next) => {
   console.log('PASSPORT DESERIALIZE:', id)
   try {
-    const user = await User.findById(id)
+    const user = await User.findOne({
+      where: {
+        id
+      },
+      attributes: [
+        'id',
+        'name',
+        'email',
+        'emailVerified'
+      ]
+    })
     next(null, user)
   } catch (error) {
     console.log(error)
@@ -30,7 +40,7 @@ providers.forEach(({
   strategyOptions,
   getProfile
 }) => {
-  strategyOptions.callbackURL = (strategyOptions.callbackURL || `http://localhost:5000/auth/oauth/${providerName.toLowerCase()}/callback`)
+  strategyOptions.callbackURL = (strategyOptions.callbackURL || `http://localhost:3000/auth/oauth/${providerName.toLowerCase()}/callback`)
   strategyOptions.passReqToCallback = true
 
   passport.use(
