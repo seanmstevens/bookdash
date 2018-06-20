@@ -92,7 +92,6 @@ module.exports = (server, nextApp) => {
   })
 
   server.all('*', (req, res) => {
-    console.log(req.session)
     let nextRequestHandler = nextApp.getRequestHandler()
     return nextRequestHandler(req, res)
   })

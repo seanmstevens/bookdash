@@ -6,11 +6,11 @@ import { NextAuth } from '../../src/next-auth'
 
 export default class extends React.Component {
   
-  static async getInitialProps({req}) {
+  static async getInitialProps({ req }) {
     return {
-      session: await NextAuth.init({req}),
-      linkedAccounts: await NextAuth.linked({req}),
-      providers: await NextAuth.providers({req})
+      session: await NextAuth.init({ req }),
+      linkedAccounts: await NextAuth.linked({ req }),
+      providers: await NextAuth.providers({ req })
     }
   }
   

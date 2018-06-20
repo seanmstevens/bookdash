@@ -11,7 +11,7 @@ class Bookdash extends App {
     let pageProps = {}
 
     if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps({ ctx })
+      pageProps = await Component.getInitialProps(ctx)
     }
 
     return { pageProps }
@@ -32,5 +32,5 @@ class Bookdash extends App {
 
 export default withRedux(createStore)(
   withReduxSaga({
-    async: true
+    async: false
   })(Bookdash))

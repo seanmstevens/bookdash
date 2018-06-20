@@ -22,8 +22,7 @@ module.exports = {
         books = await Book.findAndCountAll({
           order: [
             ['id', 'DESC']
-          ],
-          limit: 20
+          ]
         })
         books.count = books.rows.length
       }

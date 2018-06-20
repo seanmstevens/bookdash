@@ -1,22 +1,36 @@
-import { put, call, select, take, fork, all, cancel, cancelled } from 'redux-saga/effects'
+import { put, call, select, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
 import {
   AUTH_SUCCESS,
   LOGIN_REQUEST,
   REGISTER_REQUEST,
   AUTH_ERROR,
   CLEAR_ERROR,
-  UNAUTH_REQUEST
+  UNAUTH_REQUEST,
+  LOAD_BOOKS,
+  LOAD_DATA_SUCCESS,
+  FAILURE
 } from './actions/types'
 import Router from 'next/router'
 import AuthenticationService from '../services/AuthenticationService'
+import BookService from '../services/BookService'
 
 function * watchAndLog () {
-  while (true) {
-    const action = yield take('*')
-    const state = yield select()
+  // while (true) {
+  //   const action = yield take('*')
+  //   const state = yield select()
 
-    console.log('action', action)
-    console.log('state after', state)
+  //   console.log('action', action)
+  //   console.log('state after', state)
+  // }
+}
+
+function * loadDataSaga () {
+  try {
+    const res = yield call(BookService.getBooks)
+    yield put({ type: LOAD_DATA_SUCCESS, data: res.data.data })
+  } catch (err) {
+    console.log(err)
+    yield put({ type: FAILURE, error: 'Unable to fetch data' })
   }
 }
 
@@ -64,7 +78,8 @@ function * loginFlow () {
 function * rootSaga () {
   yield all([
     call(watchAndLog),
-    fork(loginFlow)
+    fork(loginFlow),
+    takeLatest(LOAD_BOOKS, loadDataSaga)
   ])
 }
 

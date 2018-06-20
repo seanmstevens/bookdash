@@ -5,8 +5,7 @@ import Link from 'next/link'
 import { NextAuth } from '../../src/next-auth'
 
 export default class extends React.Component {
-  static async getInitialProps({ ctx }) {
-    const { req } = ctx
+  static async getInitialProps({ req }) {
     return {
       session: await NextAuth.init({ req }),
       linkedAccounts: await NextAuth.linked({ req }),
@@ -45,7 +44,6 @@ export default class extends React.Component {
   }
   
   render() {
-    console.log(this.props)   
     if (this.props.session.user) {
       return (
         <div className="container">

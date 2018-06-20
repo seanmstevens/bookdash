@@ -4,8 +4,7 @@ import Link from 'next/link'
 
 export default class extends React.Component {
 
-  static async getInitialProps ({ ctx }) {
-    const { query: { email } } = ctx
+  static async getInitialProps ({ query: { email } }) {
     return {
       email
     }

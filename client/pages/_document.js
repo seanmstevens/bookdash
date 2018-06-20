@@ -56,7 +56,6 @@ MyDocument.getInitialProps = ctx => {
   // 3. page.render
 
   // Get the context of the page to collected side effects.
-  console.log('fetching page context from document')
   const pageContext = getPageContext()
   const page = ctx.renderPage(Component => props => (
     <JssProvider
@@ -66,8 +65,6 @@ MyDocument.getInitialProps = ctx => {
       <Component pageContext={pageContext} {...props} />
     </JssProvider>
   ))
-
-  console.log('hello from the document')
 
   return {
     ...page,

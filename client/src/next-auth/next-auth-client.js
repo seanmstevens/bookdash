@@ -149,7 +149,6 @@ export default class {
     .catch(() => Error('Unable to get oAuth providers'))
   }
 
-
   /*
    * Sign in
    * 

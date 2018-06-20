@@ -8,7 +8,7 @@ export default class extends React.Component {
 
   static async getInitialProps({ req }) {
     return {
-      session: await NextAuth.init({force: true, req: req})
+      session: await NextAuth.init({ force: true, req: req })
     }
   }
 

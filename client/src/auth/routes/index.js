@@ -53,11 +53,10 @@ providers.forEach(({
       user[provider] = null
     }
 
-    console.log('PROVIDER DELETED:::::', user)
-
     try {
       const newUser = await user.save()
-      return res.redirect(`http://localhost:3000/auth/callback?action=unlink&service=${provider}`)
+      return res.send({ success: true })
+      // return res.redirect(`http://localhost:3000/auth/callback?action=unlink&service=${provider}`)
     } catch (err) {
       return next(err, false)
     }
@@ -65,7 +64,8 @@ providers.forEach(({
 })
 
 router.get('/oauth/:provider', (req, res) => {
-  res.redirect('http://localhost:3000/auth/oauth/error?action=signin&type=unsupported')
+  res.send({ error: 'Provider is not supported' })
+  // res.redirect('http://localhost:3000/auth/oauth/error?action=signin&type=unsupported')
 })
 
 module.exports = router

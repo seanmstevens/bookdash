@@ -4,8 +4,7 @@ import Link from 'next/link'
 
 export default class extends React.Component {
 
-  static async getInitialProps({ ctx }) {
-    const { query: { action, type, service } } = ctx
+  static async getInitialProps({ query: { action, type, service } }) {
     return {
       action: action || null,
       type: type || null,
@@ -14,7 +13,6 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     if (this.props.action == 'signin' && this.props.type == 'oauth') {
       return(
         <div className="container">

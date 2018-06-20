@@ -4,7 +4,6 @@ const providers = require('./providers')
 const functions = require('./controllers')
 
 passport.serializeUser((user, next) => {
-  console.log('PASSPORT SERIALIZE:', user)
   try {
     next(null, user.id)
   } catch (error) {
@@ -14,7 +13,6 @@ passport.serializeUser((user, next) => {
 })
 
 passport.deserializeUser(async (id, next) => {
-  console.log('PASSPORT DESERIALIZE:', id)
   try {
     const user = await User.findOne({
       where: {

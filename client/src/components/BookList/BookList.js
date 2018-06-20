@@ -6,24 +6,25 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
+import Typography from '@material-ui/core/Typography'
 
 export default (props) => {
-  const { books } = props
+  const { books: { count, rows } } = props
 
-  return (
+  return [
+    <Typography variant="body2">Found {count} results</Typography>,
     <List>
-      {books.map(book => {
-        console.log(book)
+      {rows.map(book => {
         return (
-          <ListItem>
+          <ListItem key={book.title}>
             <ListItemIcon>
-              <Avatar></Avatar>
+              <Avatar src={book.coverArt}></Avatar>
             </ListItemIcon>
-            <ListItemText primary={book.title} secondary={book.author}>
+            <ListItemText primary={book.title} secondary={`${book.author}, ${book.publicationDate.substr(0, 4)}`}>
             </ListItemText>
           </ListItem>
         )
       })}
     </List>
-  )
+  ]
 }

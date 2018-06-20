@@ -3,7 +3,10 @@ import {
   REGISTER_REQUEST,
   LOGIN_REQUEST,
   AUTH_ERROR,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  LOAD_BOOKS,
+  LOAD_DATA_SUCCESS,
+  FAILURE
 } from './types'
 
 /**
@@ -11,6 +14,24 @@ import {
  */
 export function logout () {
   return { type: UNAUTH_REQUEST }
+}
+
+export function loadBooks () {
+  return { type: LOAD_BOOKS }
+}
+
+export function failure (error) {
+  return {
+    type: actionTypes.FAILURE,
+    error
+  }
+}
+
+export function loadDataSuccess (data) {
+  return {
+    type: LOAD_DATA_SUCCESS,
+    data
+  }
 }
 
 /**
