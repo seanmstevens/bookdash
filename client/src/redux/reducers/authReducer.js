@@ -11,26 +11,18 @@ let initialState = {
   error: '',
   loginPending: false,
   loggedIn: false,
-  token: null,
-  user: {
-    name: null,
-    email: null
-  }
+  user: null
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case AUTH_SUCCESS:
-      const { token, user: { name, email } } = action.payload
+      const { user } = action.payload
       return {
         ...state,
+        user,
         loggedIn: true,
-        loginPending: false,
-        token,
-        user: {
-          name,
-          email
-        }
+        loginPending: false
       }
 
     case LOGIN_REQUEST:

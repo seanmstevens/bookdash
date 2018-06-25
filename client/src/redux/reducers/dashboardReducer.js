@@ -1,6 +1,6 @@
 import { 
   LOAD_DATA_SUCCESS,
-  FAILURE
+  LOAD_DATA_FAILURE
 } from '../actions/types'
 
 // The initial application state
@@ -14,13 +14,13 @@ export default (state = initialState, action) => {
     case LOAD_DATA_SUCCESS:
       return {
         ...state,
-        ...{ data: action.data }
+        ...{ data: action.payload }
       }
 
-    case FAILURE:
+    case LOAD_DATA_FAILURE:
       return {
         ...state,
-        ...{ error: action.error }
+        ...{ error: action.payload }
       }
 
     default:

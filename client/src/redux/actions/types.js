@@ -1,9 +1,22 @@
+// Auth
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const REGISTER_REQUEST = 'REGISTER_REQUEST'
 export const AUTH_SUCCESS = 'AUTH_SUCCESS'
 export const UNAUTH_REQUEST = 'UNAUTH_REQUEST'
 export const AUTH_ERROR = 'AUTH_ERROR'
 export const CLEAR_ERROR = 'CLEAR_ERROR'
+
+// Activity feed
 export const LOAD_BOOKS = 'LOAD_BOOKS'
 export const LOAD_DATA_SUCCESS = 'LOAD_DATA_SUCCESS'
-export const FAILURE = 'FAILURE'
+export const LOAD_DATA_FAILURE = 'LOAD_DATA_FAILURE'
+
+// Session
+export const SESSION_REQUEST = 'SESSION_REQUEST'
+export const SESSION_SUCCESS = 'SESSION_SUCCESS'
+export const SESSION_FAILURE = 'SESSION_FAILURE'
+
+// CSRF
+export const CSRF_REQUEST = 'CSRF_REQUEST'
+export const CSRF_SUCCESS = 'CSRF_SUCCESS'
+export const CSRF_FAILURE = 'CSRF_FAILURE'

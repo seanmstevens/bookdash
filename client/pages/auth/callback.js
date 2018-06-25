@@ -1,11 +1,7 @@
 import React from 'react'
-import Link from 'next/link'
-import Head from 'next/head'
-import Router from 'next/router'
 import { NextAuth } from '../../src/next-auth'
 
 export default class extends React.Component {
-
   static async getInitialProps({ req }) {
     return {
       session: await NextAuth.init({ force: true, req: req })
@@ -15,18 +11,16 @@ export default class extends React.Component {
   async componentDidMount() {
     // Get latest session data after rendering on client then redirect.
     // The ensures client state is always updated after signing in or out.
-    const session = await NextAuth.init({force: true})
-    Router.push('/')
+    const session = await NextAuth.init({ force: true })
+    if (window.opener && window.opener !== window) {
+      window.close()
+    }
   }
 
   render() {
     // Provide a link for clients without JavaScript as a fallback.
     return (
       <React.Fragment>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1"/>
-          <script src="https://cdn.polyfill.io/v2/polyfill.min.js"/>
-        </Head>
         <style jsx global>{`
           body{ 
             background-color: #fff;
@@ -42,7 +36,7 @@ export default class extends React.Component {
           }
           .circle-loader .circle {
             fill: transparent;
-            stroke: rgba(0,0,0,0.2);
+            stroke: rgb(33,150,243);
             stroke-width: 4px;
             animation: dash 2s ease infinite, rotate 2s linear infinite;
           }

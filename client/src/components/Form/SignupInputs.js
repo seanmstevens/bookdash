@@ -20,7 +20,7 @@ const styles = theme => ({
     top: 45
   },
   input: {
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing.unit * 2
   },
   visibilityButton: {
     '&:hover': {
@@ -88,7 +88,7 @@ class SignupInputs extends Component {
     })
   }
 
-  render() {
+  render () {
     const { classes } = this.props
 
     return [
@@ -110,7 +110,7 @@ class SignupInputs extends Component {
         label="Email"
         placeholder="jane@example.com"
       />,
-      <input className={classes.hiddenField} />,
+      <input key="hidden" className={classes.hiddenField} />,
       <Field
         key="password"
         classes={classes}

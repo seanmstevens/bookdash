@@ -1,13 +1,17 @@
 import App, { Container } from 'next/app'
 import React from 'react'
 import { Provider } from 'react-redux'
-import withRedux from 'next-redux-wrapper'
+import withRedux, { setPromise } from 'next-redux-wrapper'
 import withReduxSaga from 'next-redux-saga'
+import * as actions from '../src/redux/actions'
 
 import createStore from '../src/redux/store'
 
 class Bookdash extends App {
   static async getInitialProps ({ Component, ctx }) {
+    // Get session info upon every request
+    ctx.store.dispatch(actions.retrieveSession(ctx.req))
+
     let pageProps = {}
 
     if (Component.getInitialProps) {

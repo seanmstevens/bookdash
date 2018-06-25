@@ -6,12 +6,10 @@ import {
   CLEAR_ERROR,
   LOAD_BOOKS,
   LOAD_DATA_SUCCESS,
-  FAILURE
+  SESSION_REQUEST,
+  CSRF_REQUEST
 } from './types'
 
-/**
- * Tells the app we want to log out a user
- */
 export function logout () {
   return { type: UNAUTH_REQUEST }
 }
@@ -20,11 +18,12 @@ export function loadBooks () {
   return { type: LOAD_BOOKS }
 }
 
-export function failure (error) {
-  return {
-    type: actionTypes.FAILURE,
-    error
-  }
+export function retrieveSession (req, force) {
+  return { type: SESSION_REQUEST, payload: { req, force } }
+}
+
+export function getCsrfToken () {
+  return { type: CSRF_REQUEST }
 }
 
 export function loadDataSuccess (data) {

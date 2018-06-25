@@ -11,7 +11,7 @@ export default class {
    * This is an async, isometric method which returns a session object - 
    * either by looking up the current express session object when run on the
    * server, or by using fetch (and optionally caching the result in local
-   * storage) when run on the client.  
+   * storage) when run on the client.
    * 
    * Note that actual session tokens are not stored in local storage, they are
    * kept in an HTTP Only cookie as protection against session hi-jacking by
@@ -83,7 +83,6 @@ export default class {
     })
     .catch((err) => {
       Error('Unable to get session')
-      console.log(err)
     })
   }
 
@@ -164,7 +163,6 @@ export default class {
     // Params can be just string (an email address) or an object (form fields)
     const formData = (typeof params === 'string') ? { email: params } : params
 
-    // Use either the email token generation route or the custom form auth route
     const route = (typeof params === 'string') ? '/auth/email/signin' : '/auth/signin' 
 
     // Add latest CSRF Token to request

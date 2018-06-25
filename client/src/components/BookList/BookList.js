@@ -10,9 +10,9 @@ import Typography from '@material-ui/core/Typography'
 
 export default (props) => {
   const { books: { count, rows } } = props
-
+  
   return [
-    <Typography variant="body2">Found {count} results</Typography>,
+    <Typography variant="title">Found {count} results</Typography>,
     <List>
       {rows.map(book => {
         return (

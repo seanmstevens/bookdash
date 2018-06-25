@@ -13,10 +13,10 @@ router.get('/linked', AuthenticationController.linkedAccounts)
 
 router.get('/providers', AuthenticationController.providers)
 
-router.get('/email/signin/:token', AuthenticationController.verifyEmailToken)
+router.get('/register/:token', AuthenticationController.verifyEmailToken)
 
 // POST handlers
-router.post('/email/signin', AuthenticationController.registerUser)
+router.post('/register', AuthenticationController.registerUser)
 
 router.post('/login', AuthenticationController.login)
 
@@ -54,7 +54,7 @@ providers.forEach(({
     }
 
     try {
-      const newUser = await user.save()
+      await user.save()
       return res.send({ success: true })
       // return res.redirect(`http://localhost:3000/auth/callback?action=unlink&service=${provider}`)
     } catch (err) {

@@ -16,7 +16,7 @@ if (email.server && email.username && email.password) {
   }
 }
 
-async function sendSignInEmail ({ email, url, req }) {
+async function sendVerificationEmail ({ email, url, req }) {
   nodemailer
     .createTransport(transportOptions)
     .sendMail({
@@ -124,29 +124,31 @@ module.exports = {
 
       // If the user object is valid, sign the user in
       req.logIn(newUser, (err) => {
-        if (err) return res.redirect('http://localhost:3000/auth/error?action=signin&type=token-invalid')
+        if (err) return res.redirect('/error?action=signin&type=token-invalid')
         if (req.xhr) {
           // If AJAX request (from client with JS), return JSON response
           return res.json({ success: true })
         } else {
           // If normal form POST (from client without JS) return redirect
-          return res.redirect('http://localhost:3000/auth/callback?action=signin&service=email')
+          return res.redirect('/callback?action=signin&service=email')
         }
       })
     } catch (err) {
       console.log(err)
-      return res.redirect('http://localhost:3000/auth/error?action=signin&type=token-invalid')
+      return res.redirect('/error?action=signin&type=token-invalid')
     }
   },
   async registerUser (req, res) {
-    const { email }  = req.body || null
+    const { name, email, password }  = req.body || null
     
-    if (!email || email.trim() === '') {
-      res.redirect('/auth')
+    if (!email || email.trim() === '' || !password || password.trim() === '' || !name || name.trim() === '') {
+      return res.status(403).send({
+        error: 'Some registration information is missing'
+      })
     }
 
     const token = uuid()
-    const url = (session.serverUrl || `${req.protocol}://${req.headers.host}`) + `/auth/email/signin/${token}`
+    const url = (session.serverUrl || `${req.protocol}://${req.headers.host}`) + `/auth/register/${token}`
 
     // Create verification token save it to database
     try {
@@ -159,38 +161,28 @@ module.exports = {
       let newUser
       
       if (user !== null) {
-        console.log('USER FOUND. UPDATING...')
-
         try {
-          newUser = await User.update({
-            emailToken: token
-          }, {
-            where: {
-              email
-            },
-            returning: true
-          })
-
-          newUser = newUser[1][0] // Postgres returns an array of affected row count, then array of objects
+          user.emailToken = token
+          newUser = await user.save()
         } catch (error) {
-          console.log(error)
+          throw new Error(error)
         }
       } else {
-        console.log('USER NOT FOUND. CREATING...')
         try {
           newUser = await User.create({
-            name: 'Generic User',
-            password: 'Password1',
-            email: email,
+            name,
+            password,
+            email,
             emailToken: token
           })
         } catch (error) {
-          console.log(error)
+          throw new Error(error)
         }
       }
 
+      // Sending email verification email
       try {
-        sendSignInEmail({
+        sendVerificationEmail({
           email: newUser.getDataValue('email'),
           url,
           req
@@ -199,11 +191,26 @@ module.exports = {
         console.log(error)
       }
 
-      if (req.xhr) {
-        return res.json({ success: true })
-      } else {
-        return res.redirect(`/auth/check-email?email=${email}`)
-      }
+      // We log in the user, but limit the features they can access on the front end
+      // until their email is verified. Emails are automatically verified when signing
+      // in through a third party provider (Google, Facebook, etc.)
+      req.logIn(newUser, (err) => {
+        if (err) return res.redirect('/auth/error?action=signin&type=credentials')
+        if (req.xhr) {
+          // If AJAX request (from client with JS), return JSON response
+          return res.send({
+            success: true,
+            user: {
+              email,
+              name
+            }
+          })
+        } else {
+          // If normal form POST (from client without JS) return redirect
+          return res.redirect('/auth/callback?action=signin&service=credentials')
+        }
+      })
+
     } catch (err) {
       return res.redirect(`/auth/error?action=signin&type=email&email=${email}`)
     }

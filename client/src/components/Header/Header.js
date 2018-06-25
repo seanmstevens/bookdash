@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
   root: {
@@ -30,8 +31,9 @@ const theme = createMuiTheme({
   }
 })
 
-const ButtonAppBar = props => {
-  const { classes, transparent, title, dark } = props
+const ButtonAppBar = (props) => {
+  const { classes, transparent, title, dark, loggedIn } = props
+
   return (
     <MuiThemeProvider theme={dark && theme}>
       <div className={classes.root}>
@@ -47,7 +49,7 @@ const ButtonAppBar = props => {
               <Typography variant="title" color="inherit" className={classes.flex}>
                 {title !== 'none' && 'Bookdash'}
               </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit">{loggedIn ? 'Sign Out' : 'Sign In'}</Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -59,4 +61,8 @@ ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(ButtonAppBar)
+const mapStateToProps = (state) => ({
+  loggedIn: state.session.user
+})
+
+export default withStyles(styles)(connect(mapStateToProps)(ButtonAppBar))
