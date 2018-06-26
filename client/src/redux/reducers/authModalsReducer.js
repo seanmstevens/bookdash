@@ -1,23 +1,21 @@
 import { actionTypes } from '../actions/types'
 
-// The initial application state
 let initialState = {
-  data: null,
-  error: null
+  open: false
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOAD_DATA_SUCCESS:
+    case actionTypes.MODAL_OPENED:
       return {
         ...state,
-        ...{ data: action.payload }
+        open: true
       }
 
-    case actionTypes.LOAD_DATA_FAILURE:
+    case actionTypes.MODAL_CLOSED:
       return {
         ...state,
-        ...{ error: action.payload }
+        open: false
       }
 
     default:

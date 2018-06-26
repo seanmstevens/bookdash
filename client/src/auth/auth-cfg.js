@@ -3,12 +3,14 @@ const expressSession = require('express-session')
 const lusca = require('lusca')
 const passport = require('passport')
 const passportSetup = require('./passport')
+const redis = require('redis')
 const { sequelize, User } = require('../../../database/models')
 const { session } = require('../../../env.config')
 const providers = require('./providers')
 
 const authRoutes = require('./routes')
-const SessionStore = require('connect-session-sequelize')(expressSession.Store)
+const redisClient = require('./redisClient')
+const RedisStore = require('connect-redis')(expressSession)
 
 module.exports = (server, nextApp) => {
   server.all('/_next/*', (req, res) => {
@@ -24,9 +26,9 @@ module.exports = (server, nextApp) => {
   
   server.use(expressSession({
     secret: session.sessionSecret,
-    store: new SessionStore({
-      db: sequelize,
-      checkExpirationInterval: 10 * 60 * 1000
+    store: new RedisStore({
+      client: redisClient,
+      ttl: 10 * 60 * 1000
     }),
     name: 'sessionId',
     resave: false,
@@ -39,7 +41,9 @@ module.exports = (server, nextApp) => {
     }
   }))
 
-  server.use(lusca.csrf())
+  server.use(lusca.csrf({
+    cookie: '_csrf'
+  }))
   server.set('trust proxy', 1)
 
   // Add router and passport

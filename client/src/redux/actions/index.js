@@ -1,34 +1,32 @@
-import {
-  UNAUTH_REQUEST,
-  REGISTER_REQUEST,
-  LOGIN_REQUEST,
-  AUTH_ERROR,
-  CLEAR_ERROR,
-  LOAD_BOOKS,
-  LOAD_DATA_SUCCESS,
-  SESSION_REQUEST,
-  CSRF_REQUEST
-} from './types'
+import { actionTypes } from './types'
 
 export function logout () {
-  return { type: UNAUTH_REQUEST }
+  return { type: actionTypes.UNAUTH_REQUEST }
 }
 
 export function loadBooks () {
-  return { type: LOAD_BOOKS }
+  return { type: actionTypes.LOAD_BOOKS }
+}
+
+export function openModal () {
+  return { type: actionTypes.MODAL_OPENED }
+}
+
+export function closeModal () {
+  return { type: actionTypes.MODAL_CLOSED }
 }
 
 export function retrieveSession (req, force) {
-  return { type: SESSION_REQUEST, payload: { req, force } }
+  return { type: actionTypes.SESSION_REQUEST, payload: { req, force } }
 }
 
 export function getCsrfToken () {
-  return { type: CSRF_REQUEST }
+  return { type: actionTypes.CSRF_REQUEST }
 }
 
 export function loadDataSuccess (data) {
   return {
-    type: LOAD_DATA_SUCCESS,
+    type: actionTypes.LOAD_DATA_SUCCESS,
     data
   }
 }
@@ -42,7 +40,7 @@ export function loadDataSuccess (data) {
  */
 export function registerUser (data) {
   return {
-    type: REGISTER_REQUEST,
+    type: actionTypes.REGISTER_REQUEST,
     data
   }
 }
@@ -55,7 +53,7 @@ export function registerUser (data) {
  */
 export function loginUser (data) {
   return {
-    type: LOGIN_REQUEST,
+    type: actionTypes.LOGIN_REQUEST,
     data
   }
 }
@@ -66,7 +64,7 @@ export function loginUser (data) {
  */
 export function requestError (error) {
   return {
-    type: AUTH_ERROR,
+    type: actionTypes.AUTH_ERROR,
     error
   }
 }
@@ -75,5 +73,5 @@ export function requestError (error) {
  * Sets the `error` state as empty
  */
 export function clearError () {
-  return { type: CLEAR_ERROR }
+  return { type: actionTypes.CLEAR_ERROR }
 }

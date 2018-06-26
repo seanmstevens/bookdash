@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
 
 const styles = theme => ({
   root: {
@@ -49,7 +50,7 @@ const ButtonAppBar = (props) => {
               <Typography variant="title" color="inherit" className={classes.flex}>
                 {title !== 'none' && 'Bookdash'}
               </Typography>
-            <Button color="inherit">{loggedIn ? 'Sign Out' : 'Sign In'}</Button>
+            <Button onClick={props.openModal} color="inherit">{loggedIn ? 'Sign Out' : 'Sign In'}</Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -65,4 +66,6 @@ const mapStateToProps = (state) => ({
   loggedIn: state.session.user
 })
 
-export default withStyles(styles)(connect(mapStateToProps)(ButtonAppBar))
+export default withStyles(styles)(
+  connect(mapStateToProps, actions)(ButtonAppBar)
+)

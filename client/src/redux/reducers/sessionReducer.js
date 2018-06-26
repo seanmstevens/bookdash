@@ -1,9 +1,4 @@
-import { 
-  SESSION_SUCCESS,
-  SESSION_FAILURE,
-  CSRF_SUCCESS,
-  CSRF_FAILURE
-} from '../actions/types'
+import { actionTypes } from '../actions/types'
 
 let initialState = {
   error: null
@@ -11,25 +6,25 @@ let initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SESSION_SUCCESS:
+    case actionTypes.SESSION_SUCCESS:
       return {
         ...state,
         ...action.payload
       }
 
-    case SESSION_FAILURE:
+    case actionTypes.SESSION_FAILURE:
       return {
         ...state,
         ...{ error: action.payload }
       }
 
-    case CSRF_SUCCESS:
+    case actionTypes.CSRF_SUCCESS:
       return {
         ...state,
         ...{ csrfToken: action.payload }
       }
 
-    case CSRF_FAILURE:
+    case actionTypes.CSRF_FAILURE:
       return {
         ...state,
         ...{ error: action.payload }

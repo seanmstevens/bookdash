@@ -16,21 +16,35 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Divider from '@material-ui/core/Divider'
 import ThirdPartyAccounts from './ThirdPartyAccounts'
 import Grow from '@material-ui/core/Grow'
+import Fade from '@material-ui/core/Fade'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import blue from '@material-ui/core/colors/blue'
 
 import SignupInputs from './SignupInputs'
 
-const styles = theme => ({
+const styles = {
   header: {
     paddingBottom: 0
+  },
+  card: {
+    position: 'relative'
   },
   content: {
     paddingTop: 8,
     paddingBottom: 32,
     paddingLeft: 48,
     paddingRight: 48
+  },
+  overlay: {
+    zIndex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.88)'
   }
-})
+}
 
 const theme = outerTheme => createMuiTheme({
   ...outerTheme,
@@ -39,6 +53,14 @@ const theme = outerTheme => createMuiTheme({
     primary: blue
   }
 })
+
+const LoaderOverlay = (props) => {
+  return (
+    <div className={props.classes} style={{ display: 'none' }}>
+      <LinearProgress color="secondary" />
+    </div>
+  )
+}
 
 class SignupCard extends React.Component {
   static propTypes = {
@@ -51,20 +73,32 @@ class SignupCard extends React.Component {
     errorMessage: PropTypes.string
   }
 
+  state = {
+    submitting: false
+  }
+
   handleFormSubmit = ({ name, email, password }) => {
+    this.setState({
+      submitting: true
+    })
     this.props.registerUser({ name, email, password })
   }
 
   render () {
-    const { handleSubmit, pristine, reset, submitting, valid, errorMessage, classes } = this.props
+    const { handleSubmit, pristine, reset, valid, errorMessage, classes } = this.props
 
     return (
       <MuiThemeProvider theme={theme}>
-        <Card>
+        <Card className={classes.card}>
+          <LoaderOverlay show={this.state.submitting} classes={classes.overlay} />
           <CardHeader className={classes.header} title="Sign up" subheader="Enter your email and password"/>
           <ThirdPartyAccounts />
           <Divider />
-          <form noValidate autoComplete="off" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+          <form
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}
+          >
             <CardContent className={classes.content}>
               <SignupInputs />
             </CardContent>
@@ -72,7 +106,7 @@ class SignupCard extends React.Component {
             <CardActions>
               <Button
                 type="submit"
-                disabled={!valid || pristine || submitting}
+                disabled={!valid || pristine || this.state.submitting}
                 variant="contained"
                 color="primary"
                 size="small"
@@ -92,7 +126,7 @@ class SignupCard extends React.Component {
                 <div>
                   <Grow in={!pristine}>
                     <IconButton
-                      disabled={pristine || submitting}
+                      disabled={pristine || this.state.submitting}
                       aria-label="Reset form"
                       onClick={reset}
                       className={classes.resetButton}

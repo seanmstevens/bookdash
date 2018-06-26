@@ -99,7 +99,7 @@ module.exports = {
   },
   async verifyEmailToken (req, res) {
     if (!req.params.token) {
-      return res.redirect('http://localhost:3000/auth/error?action=signin&type=token-missing')
+      return res.redirect('/auth/error?action=signin&type=token-missing')
     }
 
     try {
@@ -124,18 +124,18 @@ module.exports = {
 
       // If the user object is valid, sign the user in
       req.logIn(newUser, (err) => {
-        if (err) return res.redirect('/error?action=signin&type=token-invalid')
+        if (err) return res.redirect('/auth/error?action=signin&type=token-invalid')
         if (req.xhr) {
           // If AJAX request (from client with JS), return JSON response
           return res.json({ success: true })
         } else {
           // If normal form POST (from client without JS) return redirect
-          return res.redirect('/callback?action=signin&service=email')
+          return res.redirect('/auth/callback?action=signin&service=email')
         }
       })
     } catch (err) {
       console.log(err)
-      return res.redirect('/error?action=signin&type=token-invalid')
+      return res.redirect('/auth/error?action=signin&type=token-invalid')
     }
   },
   async registerUser (req, res) {

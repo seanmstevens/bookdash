@@ -10,6 +10,7 @@ import Hero from '../src/components/Hero/Hero'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import AuthModal from '../src/components/AuthModal/AuthModal'
 
 const styles = theme => ({
   root: {
@@ -64,6 +65,7 @@ class Index extends Component {
     return (
       <div className={classes.root}>
         <Page>
+          <AuthModal />
           <Grid container>
             <Hero size="fullscreen" src="static/images/mainpage-splash--16-9-blurred.jpg">
               <Grid className={classes.heroMain}>

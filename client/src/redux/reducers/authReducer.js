@@ -1,10 +1,4 @@
-import { 
-  AUTH_SUCCESS,
-  LOGIN_REQUEST,
-  REGISTER_REQUEST,
-  AUTH_ERROR,
-  CLEAR_ERROR
-} from '../actions/types'
+import { actionTypes } from '../actions/types'
 
 // The initial application state
 let initialState = {
@@ -16,7 +10,7 @@ let initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case AUTH_SUCCESS:
+    case actionTypes.AUTH_SUCCESS:
       const { user } = action.payload
       return {
         ...state,
@@ -25,26 +19,26 @@ export default (state = initialState, action) => {
         loginPending: false
       }
 
-    case LOGIN_REQUEST:
+    case actionTypes.LOGIN_REQUEST:
       return {
         ...state,
         loginPending: true
       }
       
-    case REGISTER_REQUEST:
+    case actionTypes.REGISTER_REQUEST:
       return {
         ...state,
         loginPending: true
       }
 
-    case AUTH_ERROR:
+    case actionTypes.AUTH_ERROR:
       return {
         ...state,
         loginPending: false,
         error: action.payload
       }
 
-    case CLEAR_ERROR:
+    case actionTypes.CLEAR_ERROR:
       return {
         ...state,
         error: ''
