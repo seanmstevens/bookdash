@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import classNames from 'classnames'
@@ -101,4 +100,4 @@ class Index extends Component {
   }
 }
 
-export default withRoot(withStyles(styles)(Index))
+export default withStyles(styles)(Index)

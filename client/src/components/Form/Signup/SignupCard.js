@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm } from 'redux-form'
+import { reduxForm, startSubmit } from 'redux-form'
 import { connect } from 'react-redux'
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import * as mapDispatchToProps from '../../redux/actions'
+import * as actions from '../../../redux/actions'
 
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
@@ -14,9 +14,10 @@ import IconButton from '@material-ui/core/IconButton'
 import Refresh from '@material-ui/icons/Refresh'
 import Tooltip from '@material-ui/core/Tooltip'
 import Divider from '@material-ui/core/Divider'
-import ThirdPartyAccounts from './ThirdPartyAccounts'
+import ThirdPartyAccounts from '../ThirdPartyAccounts'
 import Grow from '@material-ui/core/Grow'
 import Fade from '@material-ui/core/Fade'
+import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import blue from '@material-ui/core/colors/blue'
 
@@ -38,29 +39,23 @@ const styles = {
   overlay: {
     zIndex: 1,
     position: 'absolute',
+    borderRadius: 2,
+    overflow: 'hidden',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.88)'
+    backgroundColor: 'rgba(255, 255, 255, 0.78)'
   }
 }
 
 const theme = outerTheme => createMuiTheme({
   ...outerTheme,
   palette: {
-    type: 'light',
+    ...outerTheme.palette,
     primary: blue
   }
 })
-
-const LoaderOverlay = (props) => {
-  return (
-    <div className={props.classes} style={{ display: 'none' }}>
-      <LinearProgress color="secondary" />
-    </div>
-  )
-}
 
 class SignupCard extends React.Component {
   static propTypes = {
@@ -78,22 +73,27 @@ class SignupCard extends React.Component {
   }
 
   handleFormSubmit = ({ name, email, password }) => {
-    this.setState({
-      submitting: true
-    })
+    // this.props.startSubmit('signup')
     this.props.registerUser({ name, email, password })
   }
 
   render () {
-    const { handleSubmit, pristine, reset, valid, errorMessage, classes } = this.props
+    const { handleSubmit, pristine, reset, loginPending, valid, errorMessage, classes } = this.props
 
     return (
       <MuiThemeProvider theme={theme}>
         <Card className={classes.card}>
-          <LoaderOverlay show={this.state.submitting} classes={classes.overlay} />
+          <Fade in={loginPending} mountOnEnter unmountOnExit>
+            <div className={classes.overlay}>
+              <LinearProgress color="primary" />
+            </div>
+          </Fade>
           <CardHeader className={classes.header} title="Sign up" subheader="Enter your email and password"/>
           <ThirdPartyAccounts />
           <Divider />
+          {errorMessage &&
+            <Typography color="error" align="center" variant="caption">{errorMessage}</Typography>
+          }
           <form
             noValidate
             autoComplete="off"
@@ -106,7 +106,7 @@ class SignupCard extends React.Component {
             <CardActions>
               <Button
                 type="submit"
-                disabled={!valid || pristine || this.state.submitting}
+                disabled={!valid || pristine || loginPending}
                 variant="contained"
                 color="primary"
                 size="small"
@@ -126,7 +126,7 @@ class SignupCard extends React.Component {
                 <div>
                   <Grow in={!pristine}>
                     <IconButton
-                      disabled={pristine || this.state.submitting}
+                      disabled={pristine || loginPending}
                       aria-label="Reset form"
                       onClick={reset}
                       className={classes.resetButton}
@@ -144,9 +144,14 @@ class SignupCard extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  loginPending: state.auth.loginPending,
+  errorMessage: state.auth.error
+})
+
 SignupCard = connect(
-  null,
-  mapDispatchToProps
+  mapStateToProps,
+  { ...actions, startSubmit }
 )(withStyles(styles)(SignupCard))
 
 export default reduxForm({

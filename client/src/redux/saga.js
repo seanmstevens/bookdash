@@ -1,6 +1,7 @@
 import qs from 'qs'
 import { put, call, select, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
 import { actionTypes } from './actions/types'
+import { stopSubmit } from 'redux-form'
 
 import Router from 'next/router'
 import AuthenticationService from '../services/AuthenticationService'
@@ -38,7 +39,6 @@ function * getSession ({ req = null, force = false } = {}) {
     }
   }
 
-  
   // If session data exists, has not expired AND force is not set then
   // return the stored session we already have.
   if (session && Object.keys(session).length > 0 && session.expires && session.expires > Date.now()) {
@@ -109,7 +109,7 @@ function * authorize ({ name, email, password }, isRegistering) {
     if (response && response.status && response.status === 200) {
       yield put({ type: actionTypes.AUTH_SUCCESS, payload: response.data })
       yield put({ type: actionTypes.CLEAR_ERROR })
-      // Router.replace('/')
+      Router.push('/books')
       // yield call(Api.storeItem, {token})
       return response.data
     }

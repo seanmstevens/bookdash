@@ -46,6 +46,5 @@ export default function getPageContext() {
     global.__INIT_MATERIAL_UI__ = createPageContext()
   }
 
-
   return global.__INIT_MATERIAL_UI__
 }

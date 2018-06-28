@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import withRoot from '../src/withRoot'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import classNames from 'classnames'
 
 import Grid from '@material-ui/core/Grid'
-import SignupCard from '../src/components/Form/SignupCard'
+import SignupCard from '../src/components/Form/Signup/SignupCard'
 import WelcomeBox from '../src/components/WelcomeBox/WelcomeBox'
 import IconButton from '@material-ui/core/IconButton'
 import NavigateBefore from '@material-ui/icons/NavigateBefore'
@@ -84,4 +83,4 @@ GetStarted.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withRoot(withStyles(styles)(GetStarted))
+export default withStyles(styles)(GetStarted)

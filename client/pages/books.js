@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import withRoot from '../src/withRoot'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
@@ -33,8 +32,4 @@ const mapStateToProps = (state) => ({
   books: state.dashboard.data
 })
 
-export default withRoot(
-  withStyles()(connect(
-    mapStateToProps
-  )(Books))
-)
+export default withStyles()(connect(mapStateToProps)(Books))

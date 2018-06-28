@@ -2,6 +2,7 @@ import Api from './Api'
 
 const authApi = Api()
 authApi.defaults.baseURL = 'http://localhost:3000/auth'
+authApi.defaults.withCredentials = true
 
 export default {
   register (credentials) {
