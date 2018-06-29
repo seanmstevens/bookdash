@@ -148,7 +148,7 @@ module.exports = {
     }
 
     const token = uuid()
-    const url = (session.serverUrl || `${req.protocol}://${req.headers.host}`) + `/auth/register/${token}`
+    const url = (session.serverUrl || `${req.protocol}://${req.headers.host}`) + `/auth/verify-email/${token}`
 
     // Create verification token save it to database
     try {

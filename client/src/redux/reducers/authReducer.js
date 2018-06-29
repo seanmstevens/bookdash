@@ -2,10 +2,11 @@ import { actionTypes } from '../actions/types'
 
 // The initial application state
 let initialState = {
-  error: '',
+  error: null,
   loginPending: false,
   loggedIn: false,
-  user: null
+  user: null,
+  providers: null
 }
 
 export default (state = initialState, action) => {
@@ -41,8 +42,20 @@ export default (state = initialState, action) => {
     case actionTypes.CLEAR_ERROR:
       return {
         ...state,
-        error: ''
+        error: null
     }
+
+    case actionTypes.PROVIDERS_SUCCESS:
+      return {
+        ...state,
+        providers: action.payload
+      }
+
+    case actionTypes.PROVIDERS_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      }
 
     default:
       return state

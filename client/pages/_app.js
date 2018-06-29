@@ -14,7 +14,7 @@ import createStore from '../src/redux/store'
 class Bookdash extends App {
   static async getInitialProps ({ Component, ctx }) {
     // Get session info upon every request
-    ctx.store.dispatch(actions.retrieveSession(ctx.req))
+    ctx.store.dispatch(actions.retrieveSession({ req: ctx.req }))
 
     let pageProps = {}
 
@@ -39,7 +39,6 @@ class Bookdash extends App {
       jssStyles.parentNode.removeChild(jssStyles)
     }
   }
-
 
   render () {
     const { Component, pageProps, store } = this.props

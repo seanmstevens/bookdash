@@ -1,19 +1,21 @@
 import React from 'react'
-import { NextAuth } from '../../src/next-auth'
+import Router from 'next/router'
+import { retrieveSession } from '../../src/redux/actions'
+import { connect } from 'react-redux'
 
-export default class extends React.Component {
-  static async getInitialProps({ req }) {
-    return {
-      session: await NextAuth.init({ force: true, req: req })
-    }
+class Callback extends React.Component {
+  static async getInitialProps({ req, store }) {
+    store.dispatch(retrieveSession({ req, force: true }))
   }
 
-  async componentDidMount() {
+  componentDidMount () {
     // Get latest session data after rendering on client then redirect.
     // The ensures client state is always updated after signing in or out.
-    const session = await NextAuth.init({ force: true })
+    this.props.dispatch(retrieveSession({ force: true }))
     if (window.opener && window.opener !== window) {
       window.close()
+    } else {
+      Router.replace('/')
     }
   }
 
@@ -68,3 +70,5 @@ export default class extends React.Component {
     )
   }
 }
+
+export default connect()(Callback)

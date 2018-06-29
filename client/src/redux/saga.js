@@ -1,7 +1,6 @@
 import qs from 'qs'
 import { put, call, select, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
 import { actionTypes } from './actions/types'
-import { stopSubmit } from 'redux-form'
 
 import Router from 'next/router'
 import AuthenticationService from '../services/AuthenticationService'
@@ -77,6 +76,24 @@ function * getCsrfToken () {
     return res.data.csrfToken
   } catch (err) {
     yield put({ type: actionTypes.CSRF_FAILURE, payload: 'Unable to get CSRF token' })
+  }
+}
+
+function * getProviders ({ payload }) {
+  let res
+  const { req } = payload
+
+  try {
+    if (req) {
+      res = yield call(req.providers)
+    } else {
+      res = yield call(AuthenticationService.providers)
+    }
+    
+    yield put({ type: actionTypes.PROVIDERS_SUCCESS, payload: req ? res : res.data })
+  } catch (error) {
+    console.log(error)
+    yield put({ type: actionTypes.PROVIDERS_FAILURE, payload: 'Unable to get oAuth providers' })
   }
 }
 
@@ -188,7 +205,8 @@ function * rootSaga () {
     call(watchAndLog),
     fork(loginFlow),
     fork(session),
-    takeLatest(actionTypes.LOAD_BOOKS, loadDataSaga)
+    takeLatest(actionTypes.LOAD_BOOKS, loadDataSaga),
+    takeLatest(actionTypes.PROVIDERS_REQUEST, getProviders)
   ])
 }
 

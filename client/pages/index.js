@@ -41,25 +41,8 @@ class Index extends Component {
     classes: PropTypes.object.isRequired
   }
 
-  state = {
-    open: false,
-  }
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-    })
-  }
-
-  handleClick = () => {
-    this.setState({
-      open: true,
-    })
-  }
-
   render () {
     const { classes } = this.props
-    const { open } = this.state
 
     return (
       <div className={classes.root}>

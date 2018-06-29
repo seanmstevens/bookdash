@@ -16,12 +16,27 @@ export function closeModal () {
   return { type: actionTypes.MODAL_CLOSED }
 }
 
-export function retrieveSession (req, force) {
-  return { type: actionTypes.SESSION_REQUEST, payload: { req, force } }
+/**
+ * Requests an updated (or new) session object from the server
+ * @param  {object} req The request object provided with server-side renders
+ * @param  {boolean} force Boolean indicating whether or not to force refresh the session object
+ */
+export function retrieveSession ({ req, force }) {
+  return {
+    type: actionTypes.SESSION_REQUEST,
+    payload: { req, force }
+  }
 }
 
 export function getCsrfToken () {
   return { type: actionTypes.CSRF_REQUEST }
+}
+
+export function retrieveProviders ({ req }) {
+  return {
+    type: actionTypes.PROVIDERS_REQUEST,
+    payload: { req }
+  }
 }
 
 export function loadDataSuccess (data) {

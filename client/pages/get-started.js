@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import classNames from 'classnames'
+import { retrieveProviders } from '../src/redux/actions'
 
 import Grid from '@material-ui/core/Grid'
 import SignupCard from '../src/components/Form/Signup/SignupCard'
@@ -43,44 +45,53 @@ const styles = theme => ({
   },
 })
 
-const GetStarted = props => {
-  const { classes } = props
+class GetStarted extends Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    providers: PropTypes.object
+  }
 
-  return (
-    <Grid className={classes.root} container direction="row">
-      <Grid
-        xs={12}
-        md={7}
-        item
-        className={classNames(classes.section, classes.welcomeBox)}
-        component="section"
-      >
-        <Link prefetch href="/">
-          <IconButton className={classes.backButton}>
-            <NavigateBefore />
-          </IconButton>
-        </Link>
-        <WelcomeBox />
-      </Grid>
-      <Grid
-        xs={12}
-        md={5}
-        item
-        className={classNames(classes.section, classes.signupBox)}
-        component="section"
-      >
-        <Grid container spacing={16} className={classes.formContainer} justify="center">
-          <Grid item xs={12} md={9}>
-            <SignupCard />
+  static async getInitialProps ({ req, store }) {
+    if (!store.getState().auth.providers) {
+      store.dispatch(retrieveProviders({ req }))
+    }
+  }
+
+  render () {
+    const { classes } = this.props
+  
+    return (
+      <Grid className={classes.root} container direction="row">
+        <Grid
+          xs={12}
+          md={7}
+          item
+          className={classNames(classes.section, classes.welcomeBox)}
+          component="section"
+        >
+          <Link prefetch href="/">
+            <IconButton className={classes.backButton}>
+              <NavigateBefore />
+            </IconButton>
+          </Link>
+          <WelcomeBox />
+        </Grid>
+        <Grid
+          xs={12}
+          md={5}
+          item
+          className={classNames(classes.section, classes.signupBox)}
+          component="section"
+        >
+          <Grid container spacing={16} className={classes.formContainer} justify="center">
+            <Grid item xs={12} md={9}>
+              <SignupCard />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  )
+    )
+  }
 }
 
-GetStarted.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(GetStarted)
+export default withStyles(styles)(connect()(GetStarted))

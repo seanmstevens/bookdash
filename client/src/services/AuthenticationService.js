@@ -21,6 +21,9 @@ export default {
       }
     })
   },
+  providers () {
+    return authApi.get('/providers')
+  },
   session () {
     return authApi.get('/session')
   },

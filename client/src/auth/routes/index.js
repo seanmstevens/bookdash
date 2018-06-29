@@ -13,7 +13,7 @@ router.get('/linked', AuthenticationController.linkedAccounts)
 
 router.get('/providers', AuthenticationController.providers)
 
-router.get('/register/:token', AuthenticationController.verifyEmailToken)
+router.get('/verify-email/:token', AuthenticationController.verifyEmailToken)
 
 // POST handlers
 router.post('/register', AuthenticationController.registerUser)

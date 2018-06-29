@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import { withStyles } from '@material-ui/core/styles'
-import { validate } from './validate'
 
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -93,15 +92,6 @@ class SignupInputs extends Component {
 
     return [
       <Field
-        key="name"
-        classes={classes}
-        name="name"
-        component={renderField}
-        type="text"
-        label="Full Name"
-        placeholder="Angela Lansbury"
-      />,
-      <Field
         key="email"
         classes={classes}
         name="email"
@@ -138,6 +128,5 @@ class SignupInputs extends Component {
 }
 
 export default reduxForm({
-  form: 'signup',
-  validate
+  form: 'login'
 })(withStyles(styles)(SignupInputs))
