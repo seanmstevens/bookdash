@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
 // import { persistStore, persistCombineReducers } from 'redux-persist'
 // import { CookieStorage } from 'redux-persist-cookie-storage'
@@ -10,12 +11,11 @@ import rootSaga from './saga'
 const sagaMiddleware = createSagaMiddleware()
 
 const bindMiddleware = (middleware) => {
-  if (process.env.NODE_ENV !== 'production') {
-    const { composeWithDevTools } = require('redux-devtools-extension')
-    return composeWithDevTools(applyMiddleware(...middleware))
-  }
+  const composeEnhancers = composeWithDevTools({
+    name: 'Bookdash'
+  })
 
-  return applyMiddleware(...middleware)
+  return composeEnhancers(applyMiddleware(...middleware))
 }
 
 const configureStore = (state) => {

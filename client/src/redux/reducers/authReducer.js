@@ -6,7 +6,14 @@ let initialState = {
   loginPending: false,
   loggedIn: false,
   user: null,
-  providers: null
+  providers: {
+    data: null,
+    error: null
+  },
+  linkedAccounts: {
+    accounts: null,
+    error: null
+  }
 }
 
 export default (state = initialState, action) => {
@@ -16,8 +23,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         user,
-        loggedIn: true,
-        loginPending: false
+        loggedIn: true
       }
 
     case actionTypes.LOGIN_REQUEST:
@@ -43,18 +49,49 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: null
-    }
+      }
+
+    case actionTypes.RESET_AUTH_STATE:
+      return {
+        ...state,
+        error: null,
+        loginPending: false
+      }
 
     case actionTypes.PROVIDERS_SUCCESS:
       return {
         ...state,
-        providers: action.payload
+        providers: {
+          data: action.payload,
+          error: null
+        }
       }
 
     case actionTypes.PROVIDERS_FAILURE:
       return {
         ...state,
-        error: action.payload
+        providers: {
+          ...state.providers,
+          error: action.payload
+        }
+      }
+
+    case actionTypes.LINKED_ACCOUNTS_SUCCESS:
+      return {
+        ...state,
+        linkedAccounts: {
+          accounts: action.payload,
+          error: null
+        }
+      }
+
+    case actionTypes.LINKED_ACCOUNTS_FAILURE:
+      return {
+        ...state,
+        linkedAccounts: {
+          ...state.linkedAccounts,
+          error: action.payload
+        }
       }
 
     default:

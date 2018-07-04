@@ -6,7 +6,6 @@ if (facebook.id && facebook.secret) {
   providers.push({
     providerName: 'Facebook',
     providerOptions: {
-      display: 'popup',
       scope: ['email', 'public_profile']
     },
     Strategy: require('passport-facebook').Strategy,

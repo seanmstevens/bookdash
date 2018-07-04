@@ -21,8 +21,18 @@ export default {
       }
     })
   },
+  signout (credentials) {
+    return authApi.post('/signout', credentials, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+  },
   providers () {
     return authApi.get('/providers')
+  },
+  linked () {
+    return authApi.get('/linked')
   },
   session () {
     return authApi.get('/session')

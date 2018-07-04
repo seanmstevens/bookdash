@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { put, call, select, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
+import { put, call, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
 import { actionTypes } from './actions/types'
 
 import Router from 'next/router'
@@ -17,55 +17,63 @@ function * watchAndLog () {
 }
 
 function * getSession ({ req = null, force = false } = {}) {
-  let session = {}
-  if (req) {
-    if (req.session) {
-      // If running on the server session data should be in the req object
-      session.csrfToken = req.connection._httpMessage.locals._csrf
-      session.expires = req.session.cookie._expires
-      // If the user is logged in, add the user to the session object
-      if (req.user) {
-        session.user = req.user
+  try {
+    let session = {}
+    if (req) {
+      if (req.session) {
+        // If running on the server session data should be in the req object
+        session.csrfToken = req.connection._httpMessage.locals._csrf
+        session.expires = req.session.cookie._expires
+        // If the user is logged in, add the user to the session object
+        if (req.user) {
+          session.user = req.user
+        }
+      }
+    } else {
+      // If running in the browser attempt to load session from sessionStore
+      if (force === true) {
+        // If force update is set, reset data store
+        yield call(_removeLocalStore, 'session')
+      } else {
+        session = yield call(_getLocalStore, 'session')
       }
     }
-  } else {
-    // If running in the browser attempt to load session from sessionStore
-    if (force === true) {
-      // If force update is set, reset data store
-      _removeLocalStore('session')
-    } else {
-      session = _getLocalStore('session')
-    }
-  }
-
-  // If session data exists, has not expired AND force is not set then
-  // return the stored session we already have.
-  if (session && Object.keys(session).length > 0 && session.expires && session.expires > Date.now()) {
-    yield put({ type: actionTypes.SESSION_SUCCESS, payload: session })
-    return
-  } else {
-    // If running on server, but session has expired return empty object
-    // (no valid session)
-    if (typeof window === 'undefined') {
-      yield put({ type: actionTypes.SESSION_SUCCESS, payload: {} })
-      return
-    }
-  }
   
-  // If we don't have session data, or it's expired, or force is set
-  // to true then revalidate it by fetching it again from the server.
-  try {
-    const res = yield call(AuthenticationService.session)
-    if (res.status !== 200) {
-      yield put({ type: actionTypes.SESSION_FAILURE, payload: 'HTTP error when trying to get session' })
+    // If session data exists, has not expired AND force is not set then
+    // return the stored session we already have.
+    if (session && Object.keys(session).length > 0 && session.expires && session.expires > Date.now()) {
+      yield put({ type: actionTypes.SESSION_SUCCESS, payload: session })
+  
+      return session
+    } else {
+      // If running on server, but session has expired return empty object
+      // (no valid session)
+      if (typeof window === 'undefined') {
+        yield put({ type: actionTypes.SESSION_SUCCESS, payload: {} })
+    
+        return {}
+      }
     }
     
-    session = res.data
-    session.expires = Date.now() + session.revalidateAge
-    
-    _saveLocalStore('session', session)
-  } catch (err) {
-    yield put({ type: actionTypes.SESSION_FAILURE, payload: 'Unable to get session information' })
+    // If we don't have session data, or it's expired, or force is set
+    // to true then revalidate it by fetching it again from the server.
+    try {
+      const res = yield call(AuthenticationService.session)
+  
+      if (res.status !== 200) {
+        yield put({ type: actionTypes.SESSION_FAILURE, payload: 'HTTP error when trying to get session' })
+      }
+      
+      session = res.data
+      session.expires = Date.now() + session.revalidateAge
+      
+      yield put({ type: actionTypes.SESSION_SUCCESS, payload: session })
+      yield call(_saveLocalStore, 'session', session)
+    } catch (err) {
+      yield put({ type: actionTypes.SESSION_FAILURE, payload: 'Unable to get session information' })
+    }
+  } catch (error) {
+    console.log('Something went wrong...', error)
   }
 }
 
@@ -79,7 +87,7 @@ function * getCsrfToken () {
   }
 }
 
-function * getProviders ({ payload }) {
+function * getProviders ({ payload } = {}) {
   let res
   const { req } = payload
 
@@ -89,11 +97,65 @@ function * getProviders ({ payload }) {
     } else {
       res = yield call(AuthenticationService.providers)
     }
+
+    if (res && res.status && res.status !== 200) {
+      yield put({
+        type: actionTypes.PROVIDERS_FAILURE,
+        payload: 'Unexpected response when trying to get providers'
+      })
+
+      return false
+    }
     
-    yield put({ type: actionTypes.PROVIDERS_SUCCESS, payload: req ? res : res.data })
+    yield put({
+      type: actionTypes.PROVIDERS_SUCCESS,
+      payload: req ? res : res.data
+    })
+
+    return req ? res : res.data
   } catch (error) {
     console.log(error)
-    yield put({ type: actionTypes.PROVIDERS_FAILURE, payload: 'Unable to get oAuth providers' })
+
+    yield put({
+      type: actionTypes.PROVIDERS_FAILURE,
+      payload: 'Unable to get oAuth providers'
+    })
+  }
+}
+
+function * getLinkedAccounts({ payload } = {}) {
+  let res
+  const { req } = payload
+
+  try {
+    if (req) {
+      res = yield call(req.linked)
+    } else {
+      res = yield call(AuthenticationService.linked)
+    }
+
+    if (res && res.status && res.status !== 200) {
+      yield put({
+        type: actionTypes.LINKED_ACCOUNTS_FAILURE,
+        payload: 'Unexpected response when trying to get linked accounts'
+      })
+
+      return false
+    }
+
+    yield put({
+      type: actionTypes.LINKED_ACCOUNTS_SUCCESS,
+      payload: req ? res : res.data
+    })
+
+    return req ? res : res.data
+  } catch (error) {
+    console.log(error)
+
+    yield put({
+      type: actionTypes.LINKED_ACCOUNTS_FAILURE,
+      payload: 'Unable to get linked accounts'
+    })
   }
 }
 
@@ -107,12 +169,16 @@ function * loadDataSaga () {
   }
 }
 
-function * authorize ({ name, email, password }, isRegistering) {
+function * authorize ({ name, email, password, isRegistering, isProvider } = {}) {
   try {
+    // If signin is through a provider, we return early and allow 
+    // the server and provider's oAuth to handle the flow
+    if (isProvider) return
+
     let response
     const formData = isRegistering ? 
       { name, email, password } :
-      { email, password}
+      { email, password }
     
     formData._csrf = yield call(getCsrfToken)
     const encodedForm = qs.stringify(formData)
@@ -125,12 +191,11 @@ function * authorize ({ name, email, password }, isRegistering) {
 
     if (response && response.status && response.status === 200) {
       yield put({ type: actionTypes.AUTH_SUCCESS, payload: response.data })
-      yield put({ type: actionTypes.CLEAR_ERROR })
       Router.push('/books')
       // yield call(Api.storeItem, {token})
       return response.data
     }
-  } catch(error) {
+  } catch (error) {
     console.error(error)
     yield put({
       type: actionTypes.AUTH_ERROR,
@@ -144,19 +209,35 @@ function * authorize ({ name, email, password }, isRegistering) {
   }
 }
 
+function * signout () {
+  try {
+    // Signout from the server
+    const csrfToken = yield call(getCsrfToken)
+    const formData = { _csrf: csrfToken }
+  
+    // Encoded form parser for sending data in the body
+    const encodedForm = qs.stringify(formData)
+    
+    // Remove cached session data
+    yield call(_removeLocalStore, 'session')
+    yield call(AuthenticationService.signout, encodedForm)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 function * loginFlow () {
   while (true) {
-    const request = yield take([
+    const { type, payload } = yield take([
       actionTypes.LOGIN_REQUEST,
       actionTypes.REGISTER_REQUEST
     ])
-    const isRegistering = request.type === actionTypes.REGISTER_REQUEST ? true : false
+
     // fork return a Task object
+    const task = yield fork(authorize, payload)
+    const action = yield take([actionTypes.SIGNOUT_REQUEST, actionTypes.AUTH_ERROR])
 
-    const task = yield fork(authorize, request.data, isRegistering)
-    const action = yield take([actionTypes.UNAUTH_REQUEST, actionTypes.AUTH_ERROR])
-
-    if (action.type === actionTypes.UNAUTH_REQUEST)
+    if (action.type === actionTypes.SIGNOUT_REQUEST)
       yield cancel(task)
     // yield call(Api.clearItem, 'token')
   }

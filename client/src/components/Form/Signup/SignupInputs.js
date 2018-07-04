@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { reduxForm, Field } from 'redux-form'
 import { withStyles } from '@material-ui/core/styles'
@@ -69,7 +69,7 @@ const renderField = ({
   </FormControl>
 )
 
-class SignupInputs extends Component {
+class SignupInputs extends React.Component {
   static propTypes = {
     classes: PropTypes.object
   }
@@ -91,49 +91,51 @@ class SignupInputs extends Component {
   render () {
     const { classes } = this.props
 
-    return [
-      <Field
-        key="name"
-        classes={classes}
-        name="name"
-        component={renderField}
-        type="text"
-        label="Full Name"
-        placeholder="Angela Lansbury"
-      />,
-      <Field
-        key="email"
-        classes={classes}
-        name="email"
-        component={renderField}
-        type="email"
-        label="Email"
-        placeholder="jane@example.com"
-      />,
-      <input key="hidden" className={classes.hiddenField} />,
-      <Field
-        key="password"
-        classes={classes}
-        name="password"
-        component={renderField}
-        type={this.state.showPassword ? 'text' : 'password'}
-        label="Password"
-        placeholder="RudabegaStew"
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              tabIndex="-1"
-              className={classes.visibilityButton}
-              aria-label="Toggle password visibility"
-              onClick={this.handleClickShowPassword}
-              onMouseDown={this.handleMouseDownPassword}
-            >
-              {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-    ]
+    return (
+      <React.Fragment>
+        <Field
+          key="name"
+          classes={classes}
+          name="name"
+          component={renderField}
+          type="text"
+          label="Full Name"
+          placeholder="Angela Lansbury"
+        />
+        <Field
+          key="email"
+          classes={classes}
+          name="email"
+          component={renderField}
+          type="email"
+          label="Email"
+          placeholder="jane@example.com"
+        />
+        <input key="hidden" className={classes.hiddenField} />
+        <Field
+          key="password"
+          classes={classes}
+          name="password"
+          component={renderField}
+          type={this.state.showPassword ? 'text' : 'password'}
+          label="Password"
+          placeholder="RudabegaStew"
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                tabIndex="-1"
+                className={classes.visibilityButton}
+                aria-label="Toggle password visibility"
+                onClick={this.handleClickShowPassword}
+                onMouseDown={this.handleMouseDownPassword}
+              >
+                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </React.Fragment>
+    )
   }
 }
 

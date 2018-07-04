@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
 import classNames from 'classnames'
-import { retrieveProviders } from '../src/redux/actions'
+import { retrieveProviders, resetAuthState } from '../src/redux/actions'
 
 import Grid from '@material-ui/core/Grid'
 import SignupCard from '../src/components/Form/Signup/SignupCard'
@@ -52,9 +52,13 @@ class GetStarted extends Component {
   }
 
   static async getInitialProps ({ req, store }) {
-    if (!store.getState().auth.providers) {
+    if (!store.getState().auth.providers.data) {
       store.dispatch(retrieveProviders({ req }))
     }
+  }
+
+  componentWillUnmount () {
+    this.props.resetAuthState()
   }
 
   render () {
@@ -94,4 +98,9 @@ class GetStarted extends Component {
   }
 }
 
-export default withStyles(styles)(connect()(GetStarted))
+export default withStyles(styles)(
+  connect(
+    null,
+    { resetAuthState }
+  )(GetStarted)
+)

@@ -11,20 +11,23 @@ import Typography from '@material-ui/core/Typography'
 export default (props) => {
   const { books: { count, rows } } = props
   
-  return [
-    <Typography variant="title">Found {count} results</Typography>,
-    <List>
-      {rows.map(book => {
-        return (
-          <ListItem key={book.title}>
-            <ListItemIcon>
-              <Avatar src={book.coverArt}></Avatar>
-            </ListItemIcon>
-            <ListItemText primary={book.title} secondary={`${book.author}, ${book.publicationDate.substr(0, 4)}`}>
-            </ListItemText>
-          </ListItem>
-        )
-      })}
-    </List>
-  ]
+  return (
+    <React.Fragment>
+      <Typography variant="subheading">Found {count} results</Typography>
+      <List>
+        {rows.map(book => {
+          return (
+            <ListItem key={book.title}>
+              <ListItemIcon>
+                <Avatar src={book.coverArt}></Avatar>
+              </ListItemIcon>
+              <ListItemText primary={book.title} secondary={`${book.author}, ${book.publicationDate.substr(0, 4)}`}>
+              </ListItemText>
+            </ListItem>
+          )
+        })}
+      </List>
+    </React.Fragment>
+  )
+  
 }

@@ -1,7 +1,7 @@
 import { actionTypes } from './types'
 
-export function logout () {
-  return { type: actionTypes.UNAUTH_REQUEST }
+export function signout () {
+  return { type: actionTypes.SIGNOUT_REQUEST }
 }
 
 export function loadBooks () {
@@ -39,6 +39,13 @@ export function retrieveProviders ({ req }) {
   }
 }
 
+export function retrieveLinkedAccounts ({ req }) {
+  return {
+    type: actionTypes.LINKED_ACCOUNTS_REQUEST,
+    payload: { req }
+  }
+}
+
 export function loadDataSuccess (data) {
   return {
     type: actionTypes.LOAD_DATA_SUCCESS,
@@ -52,12 +59,18 @@ export function loadDataSuccess (data) {
  * @param  {string} data.name The name of the user to register
  * @param  {string} data.email The email of the user to register
  * @param  {string} data.password The password of the user to register
+ * @param  {boolean} data.isRegistering Whether or not we're registering a new user
+ * @param  {boolean} data.isProvider Indicates if signin is through provider
  */
-export function registerUser (data) {
+export function registerUser ({ name, email, password, isRegistering, isProvider }) {
   return {
     type: actionTypes.REGISTER_REQUEST,
-    data
+    payload: { name, email, password, isRegistering, isProvider }
   }
+}
+
+export function resetAuthState () {
+  return { type: actionTypes.RESET_AUTH_STATE }
 }
 
 /**

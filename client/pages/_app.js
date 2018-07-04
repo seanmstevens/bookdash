@@ -7,14 +7,14 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import JssProvider from 'react-jss/lib/JssProvider'
 import getPageContext from '../src/getPageContext'
-import * as actions from '../src/redux/actions'
+import { retrieveSession } from '../src/redux/actions'
 
 import createStore from '../src/redux/store'
 
 class Bookdash extends App {
   static async getInitialProps ({ Component, ctx }) {
     // Get session info upon every request
-    ctx.store.dispatch(actions.retrieveSession({ req: ctx.req }))
+    ctx.store.dispatch(retrieveSession({ req: ctx.req, force: true }))
 
     let pageProps = {}
 

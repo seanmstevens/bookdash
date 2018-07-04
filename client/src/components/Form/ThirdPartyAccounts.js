@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import * as actions from '../../redux/actions'
 
 import Button from '@material-ui/core/Button'
 import SvgIcon from '@material-ui/core/SvgIcon'
@@ -32,39 +34,51 @@ const theme = createMuiTheme({
 class ThirdPartyAccounts extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    providers: PropTypes.object.isRequired
+    providers: PropTypes.object.isRequired,
+    handleClick: PropTypes.func.isRequired
   }
 
   handleClick = (provider) => {
-    const url = `/auth/oauth/${provider}`
-    const name = `ProviderSignin`
-    const width = provider === 'google' ? 500 : 575,
-          height = provider === 'google' ? 600 : 400
-    const specs = [
-      `width=${width}`,
-      `height=${height}`,
-      `left=${window.innerWidth / 2 - width / 2}`,
-      `top=${window.innerHeight / 2 - height / 2}`,
-      'toolbar=no',
-      'location=no',
-      'directories=no',
-      'status=no',
-      'menubar=no',
-      'scrollbars=no',
-      'resizable=no',
-      'copyhistory=no'
-    ].join()
-    window.open(url, name, specs)
+    // The following code specifies params for pop-up window authentication.
+    // This turned out to be a little too complex for now, may revisit later
+    {/*
+      const url = `/auth/oauth/${provider}`
+      const name = `ProviderSignin`
+      const width = provider === 'google' ? 500 : 575,
+            height = provider === 'google' ? 600 : 400
+      const specs = [
+        `width=${width}`,
+        `height=${height}`,
+        `left=${window.innerWidth / 2 - width / 2}`,
+        `top=${window.innerHeight / 2 - height / 2}`,
+        'toolbar=no',
+        'location=no',
+        'directories=no',
+        'status=no',
+        'menubar=no',
+        'scrollbars=no',
+        'resizable=no',
+        'copyhistory=no'
+      ].join()
+      window.open(url, name, specs)
+    */}
+    this.props.handleClick()
+    this.props.registerUser({ isProvider: true })
   }
 
   render () {
-    const { classes, providers } = this.props
+    const { classes, providers, errorMessage } = this.props
     
     return (
       <CardContent>
+        { errorMessage && <span>{errorMessage}</span> }
         <MuiThemeProvider theme={theme}>
           <Grid container spacing={16}>
-            <ProviderButtons providers={providers} classes={classes} />
+            <ProviderButtons
+              providers={providers}
+              classes={classes}
+              handleClick={this.handleClick}
+            />
           </Grid>
         </MuiThemeProvider>
       </CardContent>
@@ -73,7 +87,7 @@ class ThirdPartyAccounts extends React.Component {
 }
 
 const ProviderButtons = (props) => {
-  const { classes, providers } = props
+  const { classes, providers, handleClick } = props
 
   return (
     <React.Fragment>
@@ -84,8 +98,10 @@ const ProviderButtons = (props) => {
           return (
             <Grid item key={i}>
               <Button
-                onClick={() => this.handleClick(providerName)}
+                title={`Sign in with ${provider}`}
+                onClick={() => handleClick(providerName)}
                 mini
+                href={`/auth/oauth/${providerName}`}
                 variant="fab"
                 color="primary"
                 classes={{
@@ -111,7 +127,13 @@ const ProviderButtons = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  providers: state.auth.providers
+  providers: state.auth.providers.data,
+  errorMessage: state.auth.providers.error
 })
 
-export default withStyles(styles)(connect(mapStateToProps)(ThirdPartyAccounts))
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    actions
+  )(ThirdPartyAccounts)
+)

@@ -2,9 +2,34 @@ import React from 'react'
 import Router from 'next/router'
 import { retrieveSession } from '../../src/redux/actions'
 import { connect } from 'react-redux'
+import { withStyles } from '@material-ui/core/styles'
+
+import CircularProgress from '@material-ui/core/CircularProgress'
+
+const styles = theme => ({
+  circleLoader: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: '50%',
+    zIndex: 100,
+    textAlign: 'center',
+    transform: 'translate(-50%, -50%)',
+  }
+})
 
 class Callback extends React.Component {
-  static async getInitialProps({ req, store }) {
+  static async getInitialProps({ req, res, store }) {
+    if (store.getState().session.user) {
+      if (res) {
+        res.redirect('/')
+      } else {
+        Router.replace('/')
+      }
+
+      return {}
+    }
+
     store.dispatch(retrieveSession({ req, force: true }))
   }
 
@@ -20,55 +45,16 @@ class Callback extends React.Component {
   }
 
   render() {
+    const { classes } = this.props
     // Provide a link for clients without JavaScript as a fallback.
     return (
       <React.Fragment>
-        <style jsx global>{`
-          body{ 
-            background-color: #fff;
-          }
-          .circle-loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50%;
-            z-index: 100;
-            text-align: center;
-            transform: translate(-50%, -50%);
-          }
-          .circle-loader .circle {
-            fill: transparent;
-            stroke: rgb(33,150,243);
-            stroke-width: 4px;
-            animation: dash 2s ease infinite, rotate 2s linear infinite;
-          }
-          @keyframes dash {
-            0% {
-              stroke-dasharray: 1,95;
-              stroke-dashoffset: 0;
-            }
-            50% {
-              stroke-dasharray: 85,95;
-              stroke-dashoffset: -25;
-            }
-            100% {
-              stroke-dasharray: 85,95;
-              stroke-dashoffset: -93;
-            }
-          }
-          @keyframes rotate {
-            0% {transform: rotate(0deg); }
-            100% {transform: rotate(360deg); }
-          }
-        `}</style>
-        <a href="/" className="circle-loader">
-          <svg className="circle" width="60" height="60" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="30" cy="30" r="15"/>
-          </svg>
+        <a href="/" className={classes.circleLoader}>
+          <CircularProgress size={70} color="primary" />
         </a>
       </React.Fragment>
     )
   }
 }
 
-export default connect()(Callback)
+export default withStyles(styles)(connect()(Callback))

@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles'
-import Link from 'next/link'
-import * as actions from '../src/redux/actions'
+import { loadBooks } from '../src/redux/actions'
 
 import Page from '../src/layouts/Main'
 import Grid from '@material-ui/core/Grid'
@@ -15,21 +12,23 @@ class Books extends Component {
   static async getInitialProps ({ store, isServer }) {
 
     if (!store.getState().dashboard.data) {
-      store.dispatch(actions.loadBooks())
+      store.dispatch(loadBooks())
     }
 
     return { isServer }
   }
 
   render () {
-    return (
+    return [
+      <Typography variant="display2">Hello, {this.props.user.name}</Typography>,
       <BookList books={this.props.books} />
-    )
+    ]
   }
 }
 
 const mapStateToProps = (state) => ({
-  books: state.dashboard.data
+  books: state.dashboard.data,
+  user: state.session.user
 })
 
-export default withStyles()(connect(mapStateToProps)(Books))
+export default connect(mapStateToProps)(Books)

@@ -63,18 +63,29 @@ class SignupCard extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
-    submitting: PropTypes.bool.isRequired,
     error: PropTypes.bool,
-    errorMessage: PropTypes.string
+    errorMessage: PropTypes.string,
+    registerUser: PropTypes.func.isRequired
   }
 
   state = {
-    submitting: false
+    submitPending: false
+  }
+
+  handleRegisterEvent = () => {
+    this.setState({
+      submitPending: true
+    })
   }
 
   handleFormSubmit = ({ name, email, password }) => {
-    // this.props.startSubmit('signup')
-    this.props.registerUser({ name, email, password })
+    this.handleRegisterEvent()
+    this.props.registerUser({
+      name,
+      email,
+      password,
+      isRegistering: true
+    })
   }
 
   render () {
@@ -82,14 +93,14 @@ class SignupCard extends React.Component {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <Card className={classes.card}>
-          <Fade in={loginPending} mountOnEnter unmountOnExit>
+        <Card className={classes.card} raised>
+          <Fade in={this.state.submitPending} mountOnEnter unmountOnExit>
             <div className={classes.overlay}>
               <LinearProgress color="primary" />
             </div>
           </Fade>
           <CardHeader className={classes.header} title="Sign up" subheader="Enter your email and password"/>
-          <ThirdPartyAccounts />
+          <ThirdPartyAccounts handleClick={this.handleRegisterEvent} />
           <Divider />
           {errorMessage &&
             <Typography color="error" align="center" variant="caption">{errorMessage}</Typography>

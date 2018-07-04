@@ -83,7 +83,11 @@ MyDocument.getInitialProps = ctx => {
         <style
           id="jss-server-side"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
+          // Check to see if pageContext exists.
+          // 500 errors will not provide a pageContext object, resulting in a crash
+          dangerouslySetInnerHTML={{
+            __html: pageContext && pageContext.sheetsRegistry && pageContext.sheetsRegistry.toString()
+          }}
         />
         {flush() || null}
       </React.Fragment>

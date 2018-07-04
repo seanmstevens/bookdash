@@ -1,5 +1,4 @@
 import axios from 'axios'
-const token = 'cool'
 
 export default () => {
   return axios.create({
