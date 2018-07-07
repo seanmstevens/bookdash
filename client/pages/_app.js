@@ -8,8 +8,25 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import JssProvider from 'react-jss/lib/JssProvider'
 import getPageContext from '../src/getPageContext'
 import { retrieveSession } from '../src/redux/actions'
+import NProgress from 'nprogress'
+import Router from 'next/router'
 
 import createStore from '../src/redux/store'
+
+NProgress.configure({
+  minimum: 0.15,
+  showSpinner: false,
+  easing: 'cubic-bezier(0.5, 0.08, 0, 1)',
+  speed: 430
+})
+
+Router.onRouteChangeStart = (url) => {
+  console.log(`Loading: ${url}`)
+
+  NProgress.start()
+}
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 class Bookdash extends App {
   static async getInitialProps ({ Component, ctx }) {

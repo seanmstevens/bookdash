@@ -89,7 +89,16 @@ class SignupCard extends React.Component {
   }
 
   render () {
-    const { handleSubmit, pristine, reset, loginPending, valid, errorMessage, classes } = this.props
+    const {
+      handleSubmit,
+      pristine,
+      reset,
+      loginPending,
+      valid,
+      errorMessage,
+      classes,
+      csrfToken
+    } = this.props
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -156,13 +165,14 @@ class SignupCard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  csrfToken: state.session.csrfToken,
   loginPending: state.auth.loginPending,
   errorMessage: state.auth.error
 })
 
 SignupCard = connect(
   mapStateToProps,
-  { ...actions, startSubmit }
+  actions
 )(withStyles(styles)(SignupCard))
 
 export default reduxForm({

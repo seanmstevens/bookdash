@@ -130,7 +130,7 @@ module.exports = {
           return res.json({ success: true })
         } else {
           // If normal form POST (from client without JS) return redirect
-          return res.redirect('/auth/callback?action=signin&service=email')
+          return res.redirect('/profile?email_verified=1')
         }
       })
     } catch (err) {
@@ -260,7 +260,7 @@ module.exports = {
     // Log user out with Passport and remove their Express session
     req.logout()
     req.session.destroy(() => {
-      return res.redirect('/auth/callback?action=signout')
+      return res.redirect('/?logged_out=1')
     })
   }
 }

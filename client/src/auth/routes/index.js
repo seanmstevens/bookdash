@@ -29,7 +29,7 @@ providers.forEach(({
 }) => {
   const provider = providerName.toLowerCase()
   // Route to start sign in
-  router.get(`/oauth/${provider}`, passport.authenticate(provider, providerOptions))
+  router.post(`/oauth/${provider}`, passport.authenticate(provider, providerOptions))
 
   router.get(`/oauth/${provider}/callback`,
     passport.authenticate(provider, {

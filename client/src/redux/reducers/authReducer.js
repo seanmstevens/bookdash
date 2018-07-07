@@ -38,6 +38,19 @@ export default (state = initialState, action) => {
         loginPending: true
       }
 
+    case actionTypes.SIGNOUT_SUCCESS:
+      return {
+        ...state,
+        user: null,
+        loggedIn: false
+      }
+
+    case actionTypes.SIGNOUT_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      }
+
     case actionTypes.AUTH_ERROR:
       return {
         ...state,

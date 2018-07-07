@@ -19,10 +19,12 @@ class Books extends Component {
   }
 
   render () {
-    return [
-      <Typography variant="display2">Hello, {this.props.user.name}</Typography>,
-      <BookList books={this.props.books} />
-    ]
+    return (
+      <Page>
+        <Typography variant="display2">Hello, {this.props.user.name}</Typography>,
+        <BookList books={this.props.books} />
+      </Page>
+    )
   }
 }
 

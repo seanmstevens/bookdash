@@ -40,7 +40,7 @@ class Callback extends React.Component {
     if (window.opener && window.opener !== window) {
       window.close()
     } else {
-      Router.replace('/')
+      Router.replace('/books')
     }
   }
 

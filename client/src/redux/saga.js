@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { put, call, take, takeLatest, fork, all, cancel, cancelled } from 'redux-saga/effects'
+import { put, call, take, takeLatest, select, fork, all, cancel, cancelled } from 'redux-saga/effects'
 import { actionTypes } from './actions/types'
 
 import Router from 'next/router'
@@ -180,7 +180,7 @@ function * authorize ({ name, email, password, isRegistering, isProvider } = {})
       { name, email, password } :
       { email, password }
     
-    formData._csrf = yield call(getCsrfToken)
+    formData._csrf = yield select(state => state.session.csrfToken)
     const encodedForm = qs.stringify(formData)
 
     if (isRegistering) {
@@ -192,7 +192,7 @@ function * authorize ({ name, email, password, isRegistering, isProvider } = {})
     if (response && response.status && response.status === 200) {
       yield put({ type: actionTypes.AUTH_SUCCESS, payload: response.data })
       Router.push('/books')
-      // yield call(Api.storeItem, {token})
+
       return response.data
     }
   } catch (error) {
@@ -209,37 +209,45 @@ function * authorize ({ name, email, password, isRegistering, isProvider } = {})
   }
 }
 
-function * signout () {
-  try {
-    // Signout from the server
-    const csrfToken = yield call(getCsrfToken)
-    const formData = { _csrf: csrfToken }
+// function * signout ({ csrf } = null) {
+//   try {
+//     // Signout from the server
+//     // const csrfToken = yield call(getCsrfToken)
+//     // const formData = { _csrf: csrfToken }
   
-    // Encoded form parser for sending data in the body
-    const encodedForm = qs.stringify(formData)
+//     // Encoded form parser for sending data in the body
+//     const encodedForm = qs.stringify(csrf)
     
-    // Remove cached session data
-    yield call(_removeLocalStore, 'session')
-    yield call(AuthenticationService.signout, encodedForm)
-  } catch (error) {
-    console.log(error)
-  }
-}
+//     // Remove cached session data
+//     yield call(_removeLocalStore, 'session')
+//     yield call(AuthenticationService.signout, encodedForm)
+
+//     // Dispatch signout action to store. This clears user/session information
+//     yield put({ type: actionTypes.SIGNOUT_SUCCESS })
+//   } catch (error) {
+//     console.log(error)
+//     yield put({ type: actionTypes.SIGNOUT_FAILURE, payload: 'Unable to signout user' })
+//   }
+// }
 
 function * loginFlow () {
   while (true) {
     const { type, payload } = yield take([
       actionTypes.LOGIN_REQUEST,
-      actionTypes.REGISTER_REQUEST
+      actionTypes.REGISTER_REQUEST,
+      actionTypes.SIGNOUT_REQUEST
     ])
 
     // fork return a Task object
-    const task = yield fork(authorize, payload)
+    const task = type === actionTypes.SIGNOUT_REQUEST ?
+      yield fork(signout) :
+      yield fork(authorize, payload)
+
     const action = yield take([actionTypes.SIGNOUT_REQUEST, actionTypes.AUTH_ERROR])
 
     if (action.type === actionTypes.SIGNOUT_REQUEST)
       yield cancel(task)
-    // yield call(Api.clearItem, 'token')
+      yield call(signout)
   }
 }
 

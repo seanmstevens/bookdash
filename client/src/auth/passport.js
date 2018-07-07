@@ -64,6 +64,8 @@ providers.forEach(({
                 }
               }
             })
+
+            console.log('FOUND USER:::::::::::::', user)
   
             if (req.user) {
               // Handles scenarios where the user is already logged in
@@ -77,7 +79,7 @@ providers.forEach(({
                     }
 
                     try {
-                      const newUser = await user.save()
+                      await user.save()
                     } catch (err) {
                       next(err)
                     }
@@ -134,7 +136,7 @@ providers.forEach(({
                   if (refreshToken) user[providerName.toLowerCase()].refreshToken = refreshToken
 
                   try {
-                    const newUser = await user.save()
+                    await user.save()
                     return next(null, user)
                   } catch (err) {
                     return next(err, false) 
@@ -150,6 +152,7 @@ providers.forEach(({
                     email: profile.email    
                   }
                 })
+                console.log('USER::::::::::', user)
                 if (user) return next(null, false)
 
                 try {
@@ -160,7 +163,8 @@ providers.forEach(({
                       id: profile.id,
                       accessToken: accessToken,
                       refreshToken: refreshToken
-                    }
+                    },
+                    emailVerified: true
                   })
 
                   return next(null, newUser)

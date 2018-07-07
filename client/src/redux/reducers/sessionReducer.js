@@ -30,6 +30,17 @@ export default (state = initialState, action) => {
         ...{ error: action.payload }
       }
 
+    case actionTypes.SIGNOUT_SUCCESS:
+      return {
+        error: null
+      }
+
+    case actionTypes.SIGNOUT_FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      }
+
     default:
       return state
   }

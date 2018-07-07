@@ -1,4 +1,4 @@
-export const validate = ({ name, email, password, passwordConfirm }) => {
+export const validate = ({ name, email, password }) => {
   const errors = {}
   
   if (!name) {
@@ -15,12 +15,6 @@ export const validate = ({ name, email, password, passwordConfirm }) => {
     errors.password = 'Required field'
   } else if (password.length < 8) {
     errors.password = 'Must be at least 8 characters'
-  }
-  
-  if (!passwordConfirm) {
-    errors.passwordConfirm = 'Required field'
-  } else if (passwordConfirm !== password) {
-    errors.passwordConfirm = 'Passwords do not match'
   }
   
   return errors

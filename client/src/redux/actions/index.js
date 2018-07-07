@@ -1,7 +1,7 @@
 import { actionTypes } from './types'
 
-export function signout () {
-  return { type: actionTypes.SIGNOUT_REQUEST }
+export function signoutUser ({ csrf }) {
+  return { type: actionTypes.SIGNOUT_REQUEST, payload: { csrf } }
 }
 
 export function loadBooks () {
