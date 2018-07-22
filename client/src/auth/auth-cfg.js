@@ -15,7 +15,6 @@ module.exports = (server, nextApp) => {
     let nextRequestHandler = nextApp.getRequestHandler()
     return nextRequestHandler(req, res)
   })
-
   
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({

@@ -22,7 +22,7 @@ const styles = theme => ({
   section: {
     padding: '1rem',
     height: '100vh',
-    minHeight: 488
+    minHeight: 500
   },
   [theme.breakpoints.up('lg')]: {
     formContainer: {
@@ -34,7 +34,8 @@ const styles = theme => ({
     backgroundColor: 'rgba(0, 0, 0, 0.08)'
   },
   welcomeBox: {
-    background: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
+    background: 'linear-gradient(to right, #ff5e62, #ff9966)'
   },
   signupBox: {
     display: 'flex',

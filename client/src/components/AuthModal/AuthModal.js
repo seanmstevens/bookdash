@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
@@ -16,13 +17,15 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import Typography from '@material-ui/core/Typography'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
-import * as actions from '../../redux/actions'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import lightBlue from '@material-ui/core/colors/lightBlue'
 
 const styles = theme => ({
   dialogActions: {
     justifyContent: 'center'
+  },
+  inputsContainer: {
+    marginBottom: 28
   },
   closeButton: {
     position: 'absolute',
@@ -33,6 +36,7 @@ const styles = theme => ({
     marginTop: 16
   },
   providerButton: {
+    textTransform: 'none',
     borderWidth: 2,
     paddingTop: 12,
     paddingBottom: 12,
@@ -40,6 +44,11 @@ const styles = theme => ({
   },
   providerIcon: {
     marginRight: 12
+  },
+  authButton: {
+    textTransform: 'none',
+    fontSize: '20px',
+    marginBottom: 8
   },
   signinMethodContainer: {
     position: 'relative',
@@ -77,6 +86,7 @@ const styles = theme => ({
 const theme = outerTheme => createMuiTheme({
   ...outerTheme,
   palette: {
+    ...outerTheme.palette,
     type: 'light',
     primary: lightBlue
   }
@@ -86,11 +96,6 @@ class AuthModal extends React.Component {
   static propTypes = {
     classes: PropTypes.object,
     fullScreen: PropTypes.bool.isRequired
-  }
-
-  state = {
-    email: '',
-    password: ''
   }
 
   componentDidMount () {
@@ -120,9 +125,12 @@ class AuthModal extends React.Component {
             <DialogContentText>
               To use all of Bookdash's features, you'll need to log in below.
             </DialogContentText>
-            <LoginInputs />
+            <div className={classes.inputsContainer}>
+              <LoginInputs />
+            </div>
             <Button
               fullWidth
+              className={classes.authButton}
               color="secondary"
               variant="contained"
               style={{ padding: 12 }}
@@ -165,7 +173,7 @@ const ProviderButtons = ({ providers, classes, csrfToken }) => (
         const providerName = provider.toLowerCase()
 
         return (
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <form action={`/auth/oauth/${providerName}`} method="POST">
               <input type="hidden" name="_csrf" value={csrfToken} />
               <Button
@@ -182,7 +190,7 @@ const ProviderButtons = ({ providers, classes, csrfToken }) => (
                   viewBox="0 0 18 18"
                   style={{ height: 18, width: 18 }}
                 >
-                  <g fill="none" fill-rule="evenodd">
+                  <g fill="none" fillRule="evenodd">
                     <path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"></path>
                     <path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4"></path>
                     <path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"></path>
@@ -196,7 +204,7 @@ const ProviderButtons = ({ providers, classes, csrfToken }) => (
                   fill="currentColor"
                   style={{ height: 18, width: 18 }}
                 >
-                  <path d="m8 14.41v-4.17c0-.42.35-.81.77-.81h2.52v-2.08c0-4.84 2.48-7.31 7.42-7.35 1.65 0 3.22.21 4.69.64.46.14.63.42.6.88l-.56 4.06c-.04.18-.14.35-.32.53-.21.11-.42.18-.63.14-.88-.25-1.78-.35-2.8-.35-1.4 0-1.61.28-1.61 1.73v1.8h4.52c.42 0 .81.42.81.88l-.35 4.17c0 .42-.35.71-.77.71h-4.21v16c0 .42-.35.81-.77.81h-5.21c-.42 0-.8-.39-.8-.81v-16h-2.52a.78.78 0 0 1 -.78-.78" fill-rule="evenodd"></path>
+                  <path d="m8 14.41v-4.17c0-.42.35-.81.77-.81h2.52v-2.08c0-4.84 2.48-7.31 7.42-7.35 1.65 0 3.22.21 4.69.64.46.14.63.42.6.88l-.56 4.06c-.04.18-.14.35-.32.53-.21.11-.42.18-.63.14-.88-.25-1.78-.35-2.8-.35-1.4 0-1.61.28-1.61 1.73v1.8h4.52c.42 0 .81.42.81.88l-.35 4.17c0 .42-.35.71-.77.71h-4.21v16c0 .42-.35.81-.77.81h-5.21c-.42 0-.8-.39-.8-.81v-16h-2.52a.78.78 0 0 1 -.78-.78" fillRule="evenodd"></path>
                 </SvgIcon>
               }
                 {provider}

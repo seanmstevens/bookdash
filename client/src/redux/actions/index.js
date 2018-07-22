@@ -16,6 +16,14 @@ export function closeModal () {
   return { type: actionTypes.MODAL_CLOSED }
 }
 
+export function openSidenav () {
+  return { type: actionTypes.SIDENAV_OPENED }
+}
+
+export function closeSidenav () {
+  return { type: actionTypes.SIDENAV_CLOSED }
+}
+
 /**
  * Requests an updated (or new) session object from the server
  * @param  {object} req The request object provided with server-side renders
@@ -79,10 +87,10 @@ export function resetAuthState () {
  * @param  {string} data.email The username of the user to log in
  * @param  {string} data.password The password of the user to log in
  */
-export function loginUser (data) {
+export function loginUser ({ email, password }) {
   return {
     type: actionTypes.LOGIN_REQUEST,
-    data
+    payload: { name, password }
   }
 }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -6,13 +7,17 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import classNames from 'classnames'
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
-import { openModal, signoutUser } from '../../redux/actions'
+import { openModal, signoutUser, openSidenav } from '../../redux/actions'
 
 const styles = {
   root: {
     flexGrow: 1,
+  },
+  title: {
+    cursor: 'pointer'
   },
   transparent: {
     backgroundColor: 'rgba(78, 81, 89, 0.5)',
@@ -34,7 +39,7 @@ const theme = createMuiTheme({
 })
 
 const ButtonAppBar = (props) => {
-  const { classes, transparent, title, dark, loggedIn, csrfToken } = props
+  const { classes, transparent, title, dark, loggedIn, csrfToken, openSidenav } = props
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
@@ -52,12 +57,19 @@ const ButtonAppBar = (props) => {
           color="secondary"
         >
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+            <IconButton
+              onClick={openSidenav}
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Menu"
+            >
               <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              {title !== 'none' && 'Bookdash'}
-            </Typography>
+            </IconButton> 
+            <Link prefetch href="/">
+              <Typography variant="title" color="inherit" className={classNames(classes.flex, classes.title)}>
+                {title !== 'none' && 'Bookdash'}
+              </Typography>
+            </Link>
             { loggedIn ? 
               <form
                 method="POST"
@@ -97,6 +109,6 @@ const mapStateToProps = (state) => ({
 export default withStyles(styles)(
   connect(
     mapStateToProps,
-    { openModal, signoutUser }
+    { openModal, signoutUser, openSidenav }
   )(ButtonAppBar)
 )

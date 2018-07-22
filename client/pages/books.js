@@ -21,7 +21,7 @@ class Books extends Component {
   render () {
     return (
       <Page>
-        <Typography variant="display2">Hello, {this.props.user.name}</Typography>,
+        <Typography variant="display2">Hello, {this.props.user.name}</Typography>
         <BookList books={this.props.books} />
       </Page>
     )

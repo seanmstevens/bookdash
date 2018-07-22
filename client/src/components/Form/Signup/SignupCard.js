@@ -135,13 +135,8 @@ class SignupCard extends React.Component {
                 Sign up
               </Button>
               <Tooltip
-                enterDelay={230}
-                id="tooltip-left"
                 title="Reset form"
                 placement="right"
-                disableHoverListener={pristine}
-                disableTouchListener={pristine}
-                disableFocusListener={pristine}
               >
                 <div>
                   <Grow in={!pristine}>

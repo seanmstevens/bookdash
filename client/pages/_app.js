@@ -1,7 +1,7 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import { Provider } from 'react-redux'
-import withRedux, { setPromise } from 'next-redux-wrapper'
+import withRedux from 'next-redux-wrapper'
 import withReduxSaga from 'next-redux-saga'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'

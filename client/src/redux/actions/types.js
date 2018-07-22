@@ -13,6 +13,10 @@ export const actionTypes = {
   // Auth modals
   MODAL_OPENED: 'MODAL_OPENED',
   MODAL_CLOSED: 'MODAL_CLOSED',
+
+  // Sidenav
+  SIDENAV_OPENED: 'SIDENAV_OPENED',
+  SIDENAV_CLOSED: 'SIDENAV_CLOSED',
   
   // Activity feed
   LOAD_BOOKS: 'LOAD_BOOKS',

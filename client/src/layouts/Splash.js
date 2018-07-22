@@ -1,8 +1,9 @@
+import React from 'react'
 import ButtonAppBar from '../components/Header/Header'
 
 export default ({ children }) => (
-  <div>
-    <ButtonAppBar title="none" transparent dark/>
+  <React.Fragment>
+    <ButtonAppBar title="none" transparent dark />
     {children}
-  </div>
+  </React.Fragment>
 )

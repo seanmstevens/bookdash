@@ -123,7 +123,7 @@ function * getProviders ({ payload } = {}) {
   }
 }
 
-function * getLinkedAccounts({ payload } = {}) {
+function * getLinkedAccounts ({ payload } = {}) {
   let res
   const { req } = payload
 

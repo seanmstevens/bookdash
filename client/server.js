@@ -9,8 +9,7 @@ const nextApp = next({
 })
 
 // Add next-auth to next app
-nextApp
-.prepare()
+nextApp.prepare()
   .then(() => {
     const server = express()
     authConfig(server, nextApp)
