@@ -21,6 +21,7 @@ module.exports = (server, nextApp) => {
     extended: true
   }))
   
+  server.set('trust proxy', 1)
   server.use(expressSession({
     secret: session.sessionSecret,
     store: new SessionStore({
@@ -37,11 +38,10 @@ module.exports = (server, nextApp) => {
       maxAge: session.sessionMaxAge
     }
   }))
-
+  
   server.use(lusca.csrf({
     cookie: '_csrf'
   }))
-  server.set('trust proxy', 1)
 
   // Add router and passport
   server.use(passport.initialize())

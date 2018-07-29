@@ -99,9 +99,14 @@ class AuthModal extends React.Component {
   }
 
   componentDidMount () {
+    console.log('AUTH MODAL MOUNTED')
     if (!this.props.providers) {
       this.props.retrieveProviders({ req: false })
     }
+  }
+
+  componentWillUnmount () {
+    console.log('AUTH MODAL UNMOUNTING')
   }
 
   render () {

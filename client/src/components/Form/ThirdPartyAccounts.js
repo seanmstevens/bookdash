@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Router from 'next/router'
 import { connect } from 'react-redux'
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import * as actions from '../../redux/actions'
